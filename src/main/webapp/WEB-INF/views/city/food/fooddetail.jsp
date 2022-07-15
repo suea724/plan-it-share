@@ -15,7 +15,7 @@
 	
 	<main>
 		<section>
-			
+			${dto.seq}
 		</section>
 	</main>
 

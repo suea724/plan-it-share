@@ -1,5 +1,18 @@
 package com.project.tour.dto;
 
-public class UserDTO {
+import lombok.Data;
 
+@Data
+public class UserDTO {
+	
+	
+	private String id;
+	private String name;
+	private String tel;
+	private String gender;
+	private String pw;
+	private String profile;
+	private String regdate;
+	private String active;
+	
 }
