@@ -11,9 +11,12 @@ public class FoodDTO {
 	private String address;
 	private String category;
 	private String cseq;
-	private String city;
 	
 	private String open;
 	private String close;
+	
+	private String likeCnt;
+	private String reviewCnt;
+	private String reviewAvg;
 
 }

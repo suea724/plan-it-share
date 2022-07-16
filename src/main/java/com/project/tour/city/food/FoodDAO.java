@@ -20,15 +20,23 @@ public class FoodDAO {
 		conn = DBUtil.open();
 	}
 	
-	public ArrayList<FoodDTO> listFood(String cseq) {
+	public ArrayList<FoodDTO> listFood(String cseq, int page) {
+		
+		int begin = (page - 1) * 10 + 1; 
+		int end = page * 10;
+		
 		try {
-			String sql = "select\r\n"
-					+ "f.seq, f.name, f.address, f.image, fc.category, c.seq as cseq, c.name as city\r\n"
-					+ "from tblFood f inner join tblCity c on f.cseq = c.seq \r\n"
-					+ "    inner join tblFoodCategory fc on f.fcseq = fc.seq where cseq = ?";
+			String sql = "select * from (select rownum as rnum,a.* from\r\n"
+					+ "(select\r\n"
+					+ "f.seq, f.name, f.address, f.open, f.close, f.image, f.cseq, fc.category, (select count(*) from tblLikeFood lf where lf.fseq = f.seq) as likecnt, (select count(*) from tblFoodReview fr where fr.fseq = f.seq) as reviewcnt, (select avg(star) from tblFoodReview fr where fr.fseq = f.seq) as reviewavg\r\n"
+					+ "from tblFood f inner join tblCity c on f.cseq = c.seq\r\n"
+					+ "        inner join tblFoodCategory fc on f.fcseq = fc.seq where c.seq = ? order by likecnt desc) a) where rnum between ? and ?";
 			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, cseq);
+			pstmt.setInt(2, begin);
+			pstmt.setInt(3, end);
+			
 			rs = pstmt.executeQuery();
 			
 			ArrayList<FoodDTO> list = new ArrayList<>();
@@ -39,9 +47,13 @@ public class FoodDAO {
 				dto.setSeq(rs.getString("seq"));
 				dto.setName(rs.getString("name"));
 				dto.setAddress(rs.getString("address"));
+				dto.setImage(rs.getString("image"));
 				dto.setCategory(rs.getString("category"));
 				dto.setCseq(rs.getString("cseq"));
-				dto.setCity(rs.getString("city"));
+				dto.setLikeCnt(rs.getString("likecnt"));
+				dto.setReviewCnt(rs.getString("reviewcnt"));
+				dto.setReviewAvg(rs.getString("reviewavg"));
+				
 				
 				list.add(dto);
 			}
@@ -85,6 +97,27 @@ public class FoodDAO {
 
 		}
 		return null;
+	}
+
+	public int getTotalCount(String cseq) {
+		
+		try {
+			String sql = "select count(*) as cnt from tblFood where cseq = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, cseq);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				return Integer.parseInt(rs.getString("cnt"));	
+			}
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.getTotalCount");
+			e.printStackTrace();
+
+		}
+		
+		return 0;
 	}
 
 }

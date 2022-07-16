@@ -76,6 +76,11 @@
 	i.fa-solid.fa-star {
 		color: gold;
 	}
+	
+	.pagination {
+		margin-top: 50px;
+		justify-content: center;
+	}
 </style>
 </head>
 <body>
@@ -83,13 +88,13 @@
 		<%@ include file="/WEB-INF/views/inc/header.jsp" %>
 		<section>
 		
-			<h2>제주</h2>
+			<h2>${cdto.name}</h2>
 			<div id="city-submenu">
 				<span><a href="">홈</a></span>
 				<span><a href="">숙소</a></span>
 				<span><a href="">관광명소</a></span>
 				<span><a href="">음식점</a></span>
-				<span><a href="">제주일정</a></span>
+				<span><a href="">${cdto.name}일정</a></span>
 			</div>
 			
 			<div id="search-box">
@@ -107,11 +112,39 @@
 			  	<img src="/planitshare/asset/image/제주.jpg" class="food-img">
 			    <h5 class="card-title"><a href="/planitshare/city/food/detail.do?cseq=${dto.cseq}&seq=${dto.seq}">${dto.name}</a></h5>
 			    <p class="card-text">${dto.category}</p>
-			    <p class="card-text"><i class="fa-solid fa-heart"></i><span>1234</span><i class="fa-solid fa-star"></i><span>4.4 (2392)</span></p>
+			    <p class="card-text">
+			    	<i class="fa-solid fa-heart"></i><span>${dto.likeCnt}</span>
+			    	<i class="fa-solid fa-star"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
+		    	</p>
 			    <p class="card-text">${dto.address}</p>
 			  </div>
 			</div>
 			</c:forEach>
+			
+			
+			<c:if test="${not empty list}">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <c:if test="${pagination.prev}">
+                        <li class="page-item">
+                            <a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${pagination.currentPage - 1}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    </c:if>
+                    <c:forEach begin="${pagination.beginPage}" end="${pagination.endPage}" var="index">
+                        <li class="page-item"><a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${index}">${index}</a></li>
+                    </c:forEach>
+                    <c:if test="${pagination.next}">
+                        <li class="page-item">
+                            <a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${pagination.currentPage + 1}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </c:if>
+                </ul>
+            </nav>
+            </c:if>
 			
 		</section>
 	</main>
