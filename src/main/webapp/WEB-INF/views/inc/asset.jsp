@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="/planitshare/asset/css/style.css" />
 <link rel="shortcut icon" href="/planitshare/asset/favicon.ico">
 
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
 <link rel="stylesheet" href="/planitshare/asset/css/jquery-ui.css">
 
 

@@ -66,6 +66,18 @@ h2, #labels > span {
             <h2>로그인</h2>
             <form action="/planitshare/login.do" method="post">
             <div id="login-box">
+	            <div id="login-mode">
+					 <span>
+				      <input type="radio" id="admin" name="loginmode" value="admin">
+				      <label for="admin">관리자</label>
+				    </span>
+				    <span>
+				      <input type="radio" id="user" name="loginmode" value="user" checked>
+				      <label for="user">일반 회원</label>
+				    </span>
+		
+				</div>
+            
                 <c:if test="${not empty loginError}">
                     <div id="login-error">
                         아이디 또는 비밀번호가 일치하지 않습니다.

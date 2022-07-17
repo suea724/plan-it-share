@@ -20,20 +20,41 @@
 
 
    <!-- 로그인 했을 때 -->
+   
    <c:if test="${not empty auth}">
    		<div id="login">
+		   
+		   <c:if test="${auth.loginmode eq 'user'}">
 		   <div id="header-profile">
 		       <div id="image-container">
-		           <img src="/planitshare/asset/image/profile.png" id="profile-img">
+		       	   <div id="profile"><img src="/planitshare/userimage/${auth.profile}" alt="" ></div>
 		       </div>
 		       <div id="login-info">
-		       	   <div id="name">${auth.name}님</div>
+		       	   <div id="name">${auth.name}님</div>	       	   
 		           <div>
 		               <a href="/planitshare/mypage.do">마이페이지</a>
+		               <a href="/planitshare/logout.do">로그아웃</a>
+		           </div>	           
+		       </div>
+		   </div>
+		   </c:if>
+		   
+		    <c:if test="${auth.loginmode eq 'admin'}">
+	           
+		    <div id="header-profile">
+		       <div id="image-container">
+		       	   <div id="profile"><img src="/planitshare/asset/image/admin.png" alt="amdin-profile" ></div>
+		       </div>
+		       <div id="login-info">
+		       	   <div id="name">관리자님</div>
+		       	    <div>
+		               <a href="/planitshare/adminpage.do">관리자페이지</a>
 		               <a href="/planitshare/logout.do">로그아웃</a>
 		           </div>
 		       </div>
 		   </div>
+		    </c:if>
+		   
 		 </div>
    </c:if>
    
