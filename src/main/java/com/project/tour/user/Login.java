@@ -26,7 +26,6 @@ public class Login extends HttpServlet {
 
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -52,23 +51,11 @@ public class Login extends HttpServlet {
         	AdminDTO adto = (AdminDTO)dao.login(dto);
         	
         	adto.setLoginmode(loginmode);
-        	
-        	if (adto != null) {
-        		
 
-                HttpSession session = req.getSession();
-                session.setAttribute("auth", adto);
+            HttpSession session = req.getSession();
+            session.setAttribute("auth", adto);
 
-                resp.sendRedirect("/planitshare/main.do");
-        		
-        	} else { //로그인 실패
-            	
-                req.setAttribute("loginError", "y");
-                RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
-                dispatcher.forward(req, resp);
-                
-            }
-       
+            resp.sendRedirect("/planitshare/main.do");
         	
 
         } else if (dao.login(dto) instanceof UserDTO) {
@@ -78,22 +65,15 @@ public class Login extends HttpServlet {
         	
             udto.setLoginmode(loginmode);
         	  
-            if (udto != null) { // 로그인 성공
+            HttpSession session = req.getSession();
+            session.setAttribute("auth", udto);
 
+            resp.sendRedirect("/planitshare/main.do");
 
-                HttpSession session = req.getSession();
-                session.setAttribute("auth", udto);
-
-                resp.sendRedirect("/planitshare/main.do");
-
-            } else { //로그인 실패
-            	
-                req.setAttribute("loginError", "y");
-                RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
-                dispatcher.forward(req, resp);
-                
-            }
-
+        } else {
+        	req.setAttribute("loginError", "y");
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
+            dispatcher.forward(req, resp);
         }
       
 	}

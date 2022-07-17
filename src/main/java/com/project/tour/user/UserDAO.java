@@ -52,6 +52,8 @@ public class UserDAO {
 			                return udto;
 			            }
 			            
+			            return null;
+			            
 			            
 					} else if (dto.getLoginmode().equals("admin")) {
 						
@@ -70,7 +72,8 @@ public class UserDAO {
 			           
 			            	return adto;
 			            }
-					}
+			            return null;
+					} 
 				
 				
 			} catch (Exception e) {
