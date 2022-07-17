@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,6 +20,11 @@
 	h2 {
 		text-align: center;
 		margin-bottom: 50px;
+	}
+	
+	h4 {
+		text-align: center;
+		margin-top: 100px;
 	}
 	
 	#search-box {
@@ -46,14 +50,14 @@
 	}
 	
 	.card {
-		width: 1000px;
-		height: 180px;
+		width: 700px;
 		margin: 30px auto;
 	}
 	
 	.food-img {
 		float: left;
-		width: 200px;
+		width: 300px;
+		height: 200px;
 		margin-right: 20px;
 	}
 
@@ -81,6 +85,14 @@
 		margin-top: 50px;
 		justify-content: center;
 	}
+	
+	.card {
+		cursor: pointer;
+	}
+	
+	#food-info {
+		margin-top: 30px;
+	}
 </style>
 </head>
 <body>
@@ -88,6 +100,7 @@
 		<%@ include file="/WEB-INF/views/inc/header.jsp" %>
 		<section>
 		
+			<!-- 서브 메뉴 -->
 			<h2>${cdto.name}</h2>
 			<div id="city-submenu">
 				<span><a href="">홈</a></span>
@@ -98,30 +111,38 @@
 			</div>
 			
 			<div id="search-box">
-				<select class="form-control">
-					<option>음식점명</option>
-					<option>카테고리</option>
+				<select class="form-control" name="distinct">
+					<option value="name">음식점명</option>
+					<option value="category">카테고리</option>
 				</select>
-				<input type="text" name="" id="" class="form-control" />
-				<button type="button" class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
+				<input type="text" name="keyword" id="" class="form-control" placeholder="검색어를 입력해주세요."/>
+				<button type="button" class="btn btn-secondary" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
 			
+			<!-- 리스트 출력 -->
 			<c:forEach var="dto" items="${list}">
-			<div class="card">
+			<div class="card" onclick="location.href='/planitshare/city/food/view.do?cseq=${dto.cseq}&seq=${dto.seq}'">
 			  <div class="card-body">
-			  	<img src="/planitshare/asset/image/제주.jpg" class="food-img">
-			    <h5 class="card-title"><a href="/planitshare/city/food/detail.do?cseq=${dto.cseq}&seq=${dto.seq}">${dto.name}</a></h5>
-			    <p class="card-text">${dto.category}</p>
-			    <p class="card-text">
-			    	<i class="fa-solid fa-heart"></i><span>${dto.likeCnt}</span>
-			    	<i class="fa-solid fa-star"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
-		    	</p>
-			    <p class="card-text">${dto.address}</p>
+			  	<img src="/planitshare/asset/image/food/${dto.image}" class="food-img">
+			  	<div id="food-info">
+				    <h5 class="card-title">${dto.name}</h5>
+				    <p class="card-text">${dto.category}</p>
+				    <p class="card-text">
+				    	<i class="fa-solid fa-heart"></i><span>${dto.likeCnt}</span>
+				    	<i class="fa-solid fa-star"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
+			    	</p>
+				    <p class="card-text">${dto.address}</p>
+			    </div>
 			  </div>
 			</div>
 			</c:forEach>
 			
+			<!-- 검색 결과가 없을 때 -->
+			<c:if test="${not empty distinct && not empty keyword && empty list}">
+				<h4>검색 결과가 없습니다.</h4>
+			</c:if>
 			
+			<!-- 페이징 -->
 			<c:if test="${not empty list}">
             <nav aria-label="Page navigation example">
                 <ul class="pagination">
@@ -148,6 +169,21 @@
 			
 		</section>
 	</main>
+	<script>
 	
+		<c:if test="${distinct != null && keyword != null}">	
+		$('select[name=distinct]').val('${distinct}');
+		$('input[name=keyword]').val('${keyword}');
+		</c:if>
+	
+		$('#search-btn').click(function() {
+			
+			let cseq = <c:out value="${cdto.seq}" />
+			let distinct = $('select[name=distinct] option:selected').val();
+			let keyword = $('input[name=keyword]').val();
+			
+			location.href='/planitshare/city/food.do?cseq=' + cseq + '&distinct=' + distinct + '&keyword=' + keyword;
+		});
+	</script>
 </body>
 </html>
