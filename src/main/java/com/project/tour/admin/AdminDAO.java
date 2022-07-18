@@ -23,8 +23,8 @@ public class AdminDAO {
 		try {
 			conn = DBUtil.open();
 			
-			int begin = (page - 1) * 10 + 1; 
-			int end = page * 10;
+			int begin = (page - 1) * 20 + 1; 
+			int end = page * 20;
 			
 			String sql = "select * from (select rownum as rnum,  l.seq, c.name as city, lc.category, l.name, l.address, l.image, l.checkin, l.checkout  from tblLodging l inner join tblCity c on c.seq = l.cseq inner join tblLodgingCategory lc on l.lcseq = lc.seq) where rnum between ? and ?";
 			pstmt = conn.prepareStatement(sql);
@@ -73,8 +73,8 @@ public class AdminDAO {
 			
 			conn = DBUtil.open();
 			
-			int begin = (page - 1) * 10 + 1; 
-			int end = page * 10;
+			int begin = (page - 1) * 20 + 1; 
+			int end = page * 20;
 			
 			String sql = "select * from (select rownum as rnum, t.seq, c.name as city, tc.category, t.placename, t.address, t.image, t.open, t.close  from tblTour t inner join tblCity c on c.seq = t.cseq inner join tblTourCategory tc on t.tcseq = tc.seq) where rnum between ? and ?";
 			pstmt = conn.prepareStatement(sql);
@@ -121,8 +121,8 @@ public class AdminDAO {
 			
 			conn = DBUtil.open();
 			
-			int begin = (page - 1) * 10 + 1; 
-			int end = page * 10;
+			int begin = (page - 1) * 20 + 1; 
+			int end = page * 20;
 			
 			String sql = "select * from (select rownum as rnum, f.seq, c.name as city, fc.category, f.name, f.address, f.image, f.open, f.close  from tblFood f inner join tblCity c on c.seq = f.cseq inner join tblFoodCategory fc on f.fcseq = fc.seq) where rnum between ? and ?";
 			pstmt = conn.prepareStatement(sql);

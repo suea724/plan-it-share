@@ -26,7 +26,7 @@ public class Pagination {
         beginPage = (currentPage / (blockSize + 1)) * blockSize + 1; // 21 페이지부터 beginPage = 21
         endPage = beginPage + blockSize - 1;
 
-        int totalPages = totalCount / blockRows + 1;
+        int totalPages = (int) Math.ceil(totalCount / (double)blockRows) ;
 
         if (totalPages < endPage) {
             endPage = totalPages;

@@ -65,6 +65,11 @@
 	.pagination {
 		justify-content: center;
 	}
+	
+	#add-btn {
+		float: right;
+		margin-bottom: 5px;
+	}
 
 </style>
 </head>
@@ -98,6 +103,11 @@
 				</tr>
 				<tr>
 					<td>
+						<button type="button" class="btn btn-primary" id="add-btn">새 장소 등록</button>
+					</td>
+				</tr>
+				<tr>
+					<td>
 					<table class="table table-bordered">
 						<tr>
 							<th>지역</th>
@@ -126,7 +136,7 @@
 								<td>${dto.checkIn}</td>
 								<td>${dto.checkOut}</td>
 								<td>
-									<span><button type="button" class="btn btn-primary btn-sm">수정</button></span>
+									<span><button type="button" class="btn btn-secondary btn-sm">수정</button></span>
 									<span><button type="button" class="btn btn-danger btn-sm">삭제</button></span>
 								</td>
 							</tr>
@@ -144,7 +154,7 @@
 								<td>${dto.open}</td>
 								<td>${dto.close}</td>
 								<td>
-									<span><button type="button" class="btn btn-primary btn-sm">수정</button></span>
+									<span><button type="button" class="btn btn-secondary btn-sm">수정</button></span>
 									<span><button type="button" class="btn btn-danger btn-sm">삭제</button></span>
 								</td>
 							</tr>
@@ -162,8 +172,8 @@
 								<td>${dto.open}</td>
 								<td>${dto.close}</td>
 								<td>
-									<span><button type="button" class="btn btn-primary btn-sm">수정</button></span>
-									<span><button type="button" class="btn btn-danger btn-sm">삭제</button></span>
+									<span><button type="button" class="btn btn-secondary btn-sm" id="update-btn">수정</button></span>
+									<span><button type="button" class="btn btn-danger btn-sm" id="delete-btn">삭제</button></span>
 								</td>
 							</tr>
 						</c:forEach>
@@ -225,6 +235,7 @@
 			$('#category span:nth-child(2)').removeClass('selected');
 			$('#category span:nth-child(3)').addClass('selected');
 		</c:if>
+		
 	</script>
 
 
