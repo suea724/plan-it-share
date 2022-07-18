@@ -1,5 +1,9 @@
 package com.project.tour.dto;
 
-public class FoodCategoryDTO {
+import lombok.Data;
 
+@Data
+public class FoodCategoryDTO {
+	private String seq;
+	private String category;
 }
