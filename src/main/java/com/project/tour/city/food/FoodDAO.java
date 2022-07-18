@@ -488,5 +488,94 @@ public class FoodDAO {
 		return 0;
 		
 	}
+
+	public int findLike(String seq, String id) {
+		try {
+			
+			conn = DBUtil.open();
+			
+			String sql = "select count(*) as cnt from tblFood f inner join tblLikeFood lf on lf.fseq = f.seq where fseq = ? and id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			pstmt.setString(2, id);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				return Integer.parseInt(rs.getString("cnt")); 
+			}
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.findLike");
+			e.printStackTrace();
+
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+
+	public int deleteLike(String seq, String id) {
+		try {
+			conn = DBUtil.open();
+			String sql = "delete from tblLikeFood where fseq = ? and id = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			pstmt.setString(2, id);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.deleteLike");
+			e.printStackTrace();
+
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+
+	public int insertLike(String seq, String id) {
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "insert into tblLikeFood values (seqLikeFood.nextVal, ?, ?)";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setString(2, seq);
+			
+			return pstmt.executeUpdate();
+			
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.deleteLike");
+			e.printStackTrace();
+
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+		
+	}
+
+	public int delReview(String seq) {
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblFoodReview where seq = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.delReview");
+			e.printStackTrace();
+
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
 	
 }
