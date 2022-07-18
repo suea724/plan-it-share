@@ -15,7 +15,9 @@
 	}
 	
 	#category span a {
-		font-size: 1.5rem;
+		font-size: 1.2rem;
+		color: gray;
+		font-weight: bold;
 	}
 	
 	.table {
@@ -41,25 +43,25 @@
 	.table tr th:nth-child(8) { width: 115px; }
 
 	section {
-		display: flex;
-	}
+      display: flex;
+   }
 
-	#admin-submenu {
-		width: 200px;
-		height: 300px;
-		margin-right: 50px;
-		margin-top: 100px;
-	}
+   #admin-submenu {
+      width: 200px;
+      height: 300px;
+      margin-right: 50px;
+      margin-top: 100px;
+   }
+   
+   #admin-submenu li {
+      list-style: none;
+      margin-bottom: 15px;
+      font-size: 23px;
+      font-weight: bold;
+   }
 	
-	#admin-submenu li {
-		list-style: none;
-		margin-bottom: 15px;
-		font-size: 23px;
-		font-weight: bold;
-	}
-	
-	span.selected {
-		text-decoration: underline;
+	#category span.selected a {
+		color: #6DA2DF;
 	}
 	
 	.pagination {
@@ -94,15 +96,11 @@
 			<table>
 				<tr>
 					<td>
-						<div id="category">
+						<span id="category">
 							<span><a href="/planitshare/adminpage/place.do?distinct=lodging">숙소</a></span>
 							<span><a href="/planitshare/adminpage/place.do?distinct=tour">관광명소</a></span>
 							<span><a href="/planitshare/adminpage/place.do?distinct=food">음식점</a></span>
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
+						</span>
 						<button type="button" class="btn btn-primary" id="add-btn">새 장소 등록</button>
 					</td>
 				</tr>
@@ -114,7 +112,6 @@
 							<th>카테고리</th>
 							<th>여행장소</th>
 							<th>주소</th>
-							<th>사진등록여부</th>
 							<c:if test="${distinct == 'lodging'}">
 							<th>체크인 시간</th>
 							<th>체크아웃 시간</th>
@@ -132,7 +129,6 @@
 								<td>${dto.category}</td>
 								<td>${dto.name}</td>
 								<td>${dto.address}</td>
-								<td>${dto.hasImage}</td>
 								<td>${dto.checkIn}</td>
 								<td>${dto.checkOut}</td>
 								<td>
@@ -150,7 +146,6 @@
 								<td>${dto.category}</td>
 								<td>${dto.name}</td>
 								<td>${dto.address}</td>
-								<td>${dto.hasImage}</td>
 								<td>${dto.open}</td>
 								<td>${dto.close}</td>
 								<td>
@@ -168,7 +163,6 @@
 								<td>${dto.category}</td>
 								<td>${dto.placename}</td>
 								<td>${dto.address}</td>
-								<td>${dto.hasImage}</td>
 								<td>${dto.open}</td>
 								<td>${dto.close}</td>
 								<td>
@@ -188,7 +182,7 @@
 			                <ul class="pagination">
 			                    <c:if test="${pagination.prev}">
 			                        <li class="page-item">
-			                            <a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${pagination.currentPage - 1}" aria-label="Previous">
+			                            <a class="page-link" href="/planitshare/adminpage/place.do?distinct=${distinct}&page=${pagination.currentPage - 1}" aria-label="Previous">
 			                                <span aria-hidden="true">&laquo;</span>
 			                            </a>
 			                        </li>
@@ -198,7 +192,7 @@
 			                    </c:forEach>
 			                    <c:if test="${pagination.next}">
 			                        <li class="page-item">
-			                            <a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${pagination.currentPage + 1}" aria-label="Next">
+			                            <a class="page-link" href="/planitshare/adminpage/place.do?distinct=${distinct}&page=${pagination.currentPage + 1}" aria-label="Next">
 			                                <span aria-hidden="true">&raquo;</span>
 			                            </a>
 			                        </li>
@@ -216,8 +210,10 @@
 
 
 	<script>
+		// 서브 메뉴 현재 위치 색상 표시
 		$('#admin-submenu li:nth-child(4) a').css('color', '#6DA2DF');
 		
+		// 장소별로 밑줄 추가
 		<c:if test="${distinct == 'lodging'}">
 			$('#category span:nth-child(2)').removeClass('selected');
 			$('#category span:nth-child(3)').removeClass('selected');
@@ -236,8 +232,12 @@
 			$('#category span:nth-child(3)').addClass('selected');
 		</c:if>
 		
+		// 장소 추가
+		$('#add-btn').click(function() {
+			location.href='/planitshare/adminpage/place/add.do';
+		});
+		
 	</script>
-
-
+	
 </body>
 </html>

@@ -210,7 +210,6 @@
 			return;
 		}
 		
-		if ()
 		let formData = new FormData($('#review-form')[0]);
 		
 		$.ajax({
