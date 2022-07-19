@@ -123,7 +123,7 @@
 			<c:forEach var="dto" items="${list}">
 			<div class="card" onclick="location.href='/planitshare/city/food/view.do?cseq=${dto.cseq}&seq=${dto.seq}'">
 			  <div class="card-body">
-			  	<img src="/planitshare/asset/image/food/${dto.image}" class="food-img">
+			  	<img src="/planitshare/asset/image/${dto.image}" class="food-img">
 			  	<div id="food-info">
 				    <h5 class="card-title">${dto.name}</h5>
 				    <p class="card-text">${dto.category}</p>

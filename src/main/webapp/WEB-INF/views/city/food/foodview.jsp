@@ -132,7 +132,7 @@
 	<main>
 		<section>
 			<div id="info-box">
-				<img src="/planitshare/asset/image/food/${dto.image}">
+				<img src="/planitshare/asset/image/${dto.image}">
 				<h5>${dto.name}</h5>
 				<p>${dto.category}</p>
 				<p>${dto.address}</p>
