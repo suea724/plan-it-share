@@ -479,7 +479,7 @@ public class AdminDAO {
 			
 			if (dto.getImage() != null) {
 				
-				String sql = "insert into tblLodging values (seqLodging.nextVal, ?, ?, ?, ?, ?, ?, ?)";
+				String sql = "insert into tblLodging values (seqLodging.nextVal, ?, ?, ?, ?, ?, ?, ?, null, null)";
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setString(1, dto.getName());
@@ -487,19 +487,19 @@ public class AdminDAO {
 				pstmt.setString(3, dto.getLcseq());
 				pstmt.setString(4, dto.getCseq());
 				pstmt.setString(5, dto.getImage());
-				pstmt.setString(6, dto.getCheckIn());
-				pstmt.setString(7, dto.getCheckOut());
+				pstmt.setString(6, dto.getCheckin());
+				pstmt.setString(7, dto.getCheckout());
 				
 			} else {
-				String sql = "insert into tblLodging values (seqLodging.nextVal, ?, ?, ?, ?, default, ?, ?)";
+				String sql = "insert into tblLodging values (seqLodging.nextVal, ?, ?, ?, ?, default, ?, ?, null, null)";
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setString(1, dto.getName());
 				pstmt.setString(2, dto.getAddress());
 				pstmt.setString(3, dto.getLcseq());
 				pstmt.setString(4, dto.getCseq());
-				pstmt.setString(5, dto.getCheckIn());
-				pstmt.setString(6, dto.getCheckOut());
+				pstmt.setString(5, dto.getCheckin());
+				pstmt.setString(6, dto.getCheckout());
 			}
 			
 			return pstmt.executeUpdate();
@@ -525,7 +525,7 @@ public class AdminDAO {
 			
 			if (dto.getImage() != null) {
 				
-				String sql = "insert into tblFood values (seqFood.nextVal, ?, ?, ?, ?, ?, ?, ?)";
+				String sql = "insert into tblFood values (seqFood.nextVal, ?, ?, ?, ?, ?, ?, ?, null, null)";
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setString(1, dto.getName());
@@ -538,7 +538,7 @@ public class AdminDAO {
 				
 			} else {
 				
-				String sql = "insert into tblFood values (seqFood.nextVal, ?, ?, ?, ?, ?, ?, default)";
+				String sql = "insert into tblFood values (seqFood.nextVal, ?, ?, ?, ?, ?, ?, default, null, null)";
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setString(1, dto.getName());
@@ -572,7 +572,7 @@ public class AdminDAO {
 			
 			if (dto.getImage() != null) {
 				
-				String sql = "insert into tblTour values (seqTour.nextVal, ?, ?, ?, ?, ?, ?, ?)";
+				String sql = "insert into tblTour values (seqTour.nextVal, ?, ?, ?, ?, ?, ?, ?, null, null)";
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setString(1, dto.getPlaceName());
@@ -584,7 +584,7 @@ public class AdminDAO {
 				pstmt.setString(7, dto.getImage());
 				
 			} else {
-				String sql = "insert into tblTour values (seqTour.nextVal, ?, ?, ?, ?, ?, ?, default)";
+				String sql = "insert into tblTour values (seqTour.nextVal, ?, ?, ?, ?, ?, ?, default, null, null)";
 				pstmt = conn.prepareStatement(sql);
 				
 				pstmt.setString(1, dto.getPlaceName());
@@ -831,8 +831,8 @@ public class AdminDAO {
 				dto.setSeq(rs.getString("seq"));
 				dto.setName(rs.getString("name"));
 				dto.setAddress(rs.getString("address"));
-				dto.setCheckIn(rs.getString("checkin"));
-				dto.setCheckOut(rs.getString("checkout"));
+				dto.setCheckin(rs.getString("checkin"));
+				dto.setCheckout(rs.getString("checkout"));
 				dto.setCseq(rs.getString("cseq"));
 				dto.setLcseq(rs.getString("lcseq"));
 				dto.setImage(rs.getString("image"));
@@ -899,8 +899,8 @@ public class AdminDAO {
 			pstmt.setString(1, dto.getName());
 			pstmt.setString(2, dto.getLcseq());
 			pstmt.setString(3, dto.getCseq());
-			pstmt.setString(4, dto.getCheckIn());
-			pstmt.setString(5, dto.getCheckOut());
+			pstmt.setString(4, dto.getCheckin());
+			pstmt.setString(5, dto.getCheckout());
 			pstmt.setString(6, dto.getAddress());
 			pstmt.setString(7, dto.getSeq());
 			

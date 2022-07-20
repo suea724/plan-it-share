@@ -7,6 +7,10 @@
 <meta charset="UTF-8">
 <title>Plan It Share</title>
 <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <style>
 	.table.layout {
 		width: 1000px;
@@ -187,6 +191,30 @@
 	
 	<main>
 		<section>
+		
+		<!-- Modal -->
+		<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title" id="staticBackdropLabel">일정에 초대하기</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <div class="ui-widget">
+				  <label for="tags">Tags: </label>
+				  <input id="tags">
+				</div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+		        <button type="button" class="btn btn-primary">초대하기</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
 			
 			<table class="table table-borderless layout">
 				<tr>
@@ -206,7 +234,7 @@
 						</c:forEach>
 						<span><img src="/planitshare/userimage/${pdto.authorProfile}" title="${pdto.author}"></span>
 						<c:if test="${auth.id == pdto.author}">
-						<button class="btn btn-secondary btn-sm">+</button>
+						<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#staticBackdrop">+</button>
 						</c:if>
 					</td>
 				</tr>
@@ -400,6 +428,7 @@
 			location.href='/planitshare/plan/view/delete.do?seq=' + seq;
 		}
 	}
+	
 	</script>
 
 </body>

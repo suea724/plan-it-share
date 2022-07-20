@@ -20,6 +20,7 @@ public class FoodDTO {
 	private String likeCnt;
 	private String reviewCnt;
 	private String reviewAvg;
+	private String place;
 	
 	private String lat;
 	private String lng;

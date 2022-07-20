@@ -3,7 +3,10 @@ package com.project.tour.dto;
 import lombok.Data;
 
 @Data
-public class BannedWordDTO {
+public class TourLikeDTO {
+
 	private String seq;
-	private String word;
+	private String id;
+	private String tseq;
+	
 }

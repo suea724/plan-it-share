@@ -14,6 +14,8 @@ public class TourDTO {
 	private String image;
 	private String distrinct;
 	
+	private String placename;
+	
 	private String lat;
 	private String lng;
 }

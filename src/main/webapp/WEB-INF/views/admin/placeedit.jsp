@@ -105,11 +105,11 @@
 						<c:if test="${distinct == 'lodging'}">
 						<th>체크인 시각</th>
 						<td>
-							<input type="time" name="checkin" id="checkin" value="${ldto.checkIn}" class="form-control" required/>
+							<input type="time" name="checkin" id="checkin" value="${ldto.checkin}" class="form-control" required/>
 						</td>
 						<th>체크아웃 시각</th>
 						<td>
-							<input type="time" name="checkout" id="checkout" value="${ldto.checkOut}" class="form-control" required/>
+							<input type="time" name="checkout" id="checkout" value="${ldto.checkout}" class="form-control" required/>
 						</td>
 						</c:if>
 						

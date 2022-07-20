@@ -90,8 +90,8 @@ public class PlaceEdit extends HttpServlet {
 			dto.setName(name);
 			dto.setLcseq(category);
 			dto.setCseq(city);
-			dto.setCheckIn(checkIn);
-			dto.setCheckOut(checkOut);
+			dto.setCheckin(checkIn);
+			dto.setCheckout(checkOut);
 			dto.setAddress(address);
 			dto.setSeq(seq);
 			

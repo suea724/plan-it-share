@@ -65,8 +65,8 @@ public class PlaceAdd extends HttpServlet {
 			dto.setLcseq(category);
 			dto.setImage(image);
 			dto.setCseq(city);
-			dto.setCheckIn(checkIn);
-			dto.setCheckOut(checkOut);
+			dto.setCheckin(checkIn);
+			dto.setCheckout(checkOut);
 			dto.setAddress(address);
 			
 			result = dao.addLodging(dto);
