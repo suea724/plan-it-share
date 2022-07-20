@@ -12,4 +12,8 @@ public class LodgingDTO {
 	private String lcseq;
 	private String cseq;
 	private String image;
+	private String distrinct;
+	
+	private String lat;
+	private String lng;
 }

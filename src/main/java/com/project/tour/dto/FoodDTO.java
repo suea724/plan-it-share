@@ -12,6 +12,7 @@ public class FoodDTO {
 	private String category;
 	private String cseq;
 	private String fcseq;
+	private String distrinct;
 	
 	private String open;
 	private String close;
@@ -19,5 +20,8 @@ public class FoodDTO {
 	private String likeCnt;
 	private String reviewCnt;
 	private String reviewAvg;
+	
+	private String lat;
+	private String lng;
 
 }

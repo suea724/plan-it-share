@@ -12,4 +12,8 @@ public class TourDTO {
 	private String tcseq;
 	private String cseq;
 	private String image;
+	private String distrinct;
+	
+	private String lat;
+	private String lng;
 }
