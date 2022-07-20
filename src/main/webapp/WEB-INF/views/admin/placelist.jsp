@@ -61,7 +61,7 @@
    }
 	
 	#category span.selected a {
-		color: #6DA2DF;
+		color: black;
 	}
 	
 	.pagination {
