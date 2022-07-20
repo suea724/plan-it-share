@@ -141,7 +141,7 @@
 			    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likeCnt}</span>
 			    	<i class="fa-solid fa-star reviewCnt"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
 		    	</p>
-				<c:if test="${not empty auth}">
+				<c:if test="${auth.loginmode == 'user'}">
 				<p><button id="like"><i class="fa-solid fa-heart"></i></button></p>
 				</c:if>
 			</div>

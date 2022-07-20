@@ -24,21 +24,27 @@ public class FoodView extends HttpServlet {
 		HttpSession session = req.getSession();
 		
 		String seq = req.getParameter("seq");
-		UserDTO udto = (UserDTO) session.getAttribute("auth");
 		
 		FoodDAO dao = new FoodDAO();
-
-		FoodDTO dto = dao.findFood(seq);	
-		ArrayList<FoodReviewDTO> rlist = dao.findReviews(seq);
 		
-		// 로그인 후 해당 음식점이 관심 등록 목록에 있으면 결과 넘김 
-		if (udto != null) { 
-			int likeResult = dao.findLike(seq, udto.getId());
+		// 회원으로 로그인 시 관심 등록 여부 체크
+		if (session.getAttribute("auth") instanceof UserDTO) {
+
+			UserDTO udto = (UserDTO) session.getAttribute("auth");
 			
-			if (likeResult == 1) {
-				req.setAttribute("like", "y");
+			// 로그인 후 해당 음식점이 관심 등록 목록에 있으면 결과 넘김 
+			if (udto != null) { 
+				int likeResult = dao.findLike(seq, udto.getId());
+				
+				if (likeResult == 1) {
+					req.setAttribute("like", "y");
+				}
 			}
+			
 		}
+
+		FoodDTO dto = dao.findFood(seq);
+		ArrayList<FoodReviewDTO> rlist = dao.findReviews(seq);
 		
 		req.setAttribute("dto", dto);
 		req.setAttribute("rlist", rlist);
