@@ -69,7 +69,7 @@ public class PlaceAdd extends HttpServlet {
 			dto.setCheckOut(checkOut);
 			dto.setAddress(address);
 			
-			dao.addLodging(dto);
+			result = dao.addLodging(dto);
 			
 			
 		} else if (distinct.equals("food")){ // 음식점

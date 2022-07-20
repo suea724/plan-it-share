@@ -132,8 +132,8 @@
 								<td>${dto.checkIn}</td>
 								<td>${dto.checkOut}</td>
 								<td>
-									<span><button type="button" class="btn btn-secondary btn-sm">수정</button></span>
-									<span><button type="button" class="btn btn-danger btn-sm">삭제</button></span>
+									<span><button type="button" class="btn btn-secondary btn-sm"  onclick="update(${dto.seq})">수정</button></span>
+									<span><button type="button" class="btn btn-danger btn-sm" onclick="del(${dto.seq})">삭제</button></span>
 								</td>
 							</tr>
 						</c:forEach> 
@@ -149,8 +149,8 @@
 								<td>${dto.open}</td>
 								<td>${dto.close}</td>
 								<td>
-									<span><button type="button" class="btn btn-secondary btn-sm">수정</button></span>
-									<span><button type="button" class="btn btn-danger btn-sm">삭제</button></span>
+									<span><button type="button" class="btn btn-secondary btn-sm" onclick="update(${dto.seq})">수정</button></span>
+									<span><button type="button" class="btn btn-danger btn-sm" onclick="del(${dto.seq})">삭제</button></span>
 								</td>
 							</tr>
 						</c:forEach>
@@ -166,8 +166,8 @@
 								<td>${dto.open}</td>
 								<td>${dto.close}</td>
 								<td>
-									<span><button type="button" class="btn btn-secondary btn-sm" id="update-btn">수정</button></span>
-									<span><button type="button" class="btn btn-danger btn-sm" id="delete-btn">삭제</button></span>
+									<span><button type="button" class="btn btn-secondary btn-sm" onclick="update(${dto.seq})">수정</button></span>
+									<span><button type="button" class="btn btn-danger btn-sm"  onclick="del(${dto.seq})">삭제</button></span>
 								</td>
 							</tr>
 						</c:forEach>
@@ -236,6 +236,18 @@
 		$('#add-btn').click(function() {
 			location.href='/planitshare/adminpage/place/add.do';
 		});
+		
+		// 장소 삭제
+		function del(seq) {
+			if (confirm('해당 장소를 삭제하시겠습니까?')) {
+				location.href='/planitshare/adminpage/place/delete.do?distinct=' + `${distinct}` + '&seq=' + seq;	
+			}
+		}
+		
+		// 장소 수정
+		function update(seq) {
+			location.href='/planitshare/adminpage/place/update.do?distinct=' + `${distinct}` + '&seq=' + seq;
+		}
 		
 	</script>
 	
