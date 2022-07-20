@@ -201,7 +201,10 @@
 				</tr>
 				<tr id="invite">
 					<td colspan="2">
-						<span><img src="/planitshare/userimage/${pdto.authorProfile}"></span>
+						<c:forEach var="planUser" items="${puList}">
+						<span><img src="/planitshare/userimage/${planUser.profile}" title="${planUser.id}"></span>
+						</c:forEach>
+						<span><img src="/planitshare/userimage/${pdto.authorProfile}" title="${pdto.author}"></span>
 						<c:if test="${auth.id == pdto.author}">
 						<button class="btn btn-secondary btn-sm">+</button>
 						</c:if>
@@ -211,7 +214,7 @@
 				<tr>
 					<td colspan="2">
 						<button type="button" class="btn btn-primary">수정하기</button>
-						<button type="button" class="btn btn-secondary">삭제하기</button>
+						<button type="button" class="btn btn-secondary" onclick="delplan('${pdto.seq}')">삭제하기</button>
 					</td>
 				</tr>
 				</c:if>
@@ -391,6 +394,12 @@
 			}
 		});
 	});
+	
+	function delplan(seq) {
+		if (confirm('해당 일정을 삭제하시겠습니까?')) {
+			location.href='/planitshare/plan/view/delete.do?seq=' + seq;
+		}
+	}
 	</script>
 
 </body>

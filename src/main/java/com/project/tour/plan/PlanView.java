@@ -20,6 +20,7 @@ import com.project.tour.dto.CommentDTO;
 import com.project.tour.dto.DayDTO;
 import com.project.tour.dto.PlaceDTO;
 import com.project.tour.dto.PlanDTO;
+import com.project.tour.dto.PlanUserDTO;
 import com.project.tour.dto.UserDTO;
 
 @WebServlet("/plan/view.do")
@@ -68,6 +69,9 @@ public class PlanView extends HttpServlet {
 		
 		ArrayList<DayDTO> days = getDays(pdto);
 		
+		// 해당 일정의 편집 권한이 있는 사람 목록 가져오기
+		ArrayList<PlanUserDTO> puList = dao.getPlanUser(seq);
+		
 		// date 파싱
 		pdto.setRegdate(pdto.getRegdate().substring(0, 10));
 		pdto.setStartdate(pdto.getStartdate().substring(0, 10));
@@ -77,6 +81,7 @@ public class PlanView extends HttpServlet {
 		req.setAttribute("clist", clist);
 		req.setAttribute("pdto", pdto);
 		req.setAttribute("planList", planList);
+		req.setAttribute("puList", puList);
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/plan/planview.jsp");
 		dispatcher.forward(req, resp);
