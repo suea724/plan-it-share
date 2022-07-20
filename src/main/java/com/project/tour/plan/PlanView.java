@@ -39,15 +39,22 @@ public class PlanView extends HttpServlet {
 		ArrayList<CommentDTO> clist = dao.listComment(seq);
 		
 		HttpSession session = req.getSession();
-		UserDTO udto = (UserDTO) session.getAttribute("auth");
 		
 		// 로그인 한 상태일 때
-		if (udto != null) {
-			int result = dao.findLike(seq, udto.getId());
+		if (session.getAttribute("auth") instanceof UserDTO) {
 			
-			// 접속 계정의 좋아요 여부 체크
+			UserDTO udto = (UserDTO) session.getAttribute("auth");
+			
+			int result = dao.findLike(seq, udto.getId());
+				
 			if (result == 1) {
 				req.setAttribute("like", "y");
+			}
+			
+			// 접속 계정과 작성자 아이디가 일치하면 초대 가능한 아이디 목록 가져옴
+			if (udto.getId().equals(pdto.getAuthor())) {
+				ArrayList<String> idList = dao.getIdList(seq, udto.getId());
+				req.setAttribute("idList", idList);
 			}
 		}
 		

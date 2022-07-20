@@ -8,9 +8,8 @@
 <title>Plan It Share</title>
 <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="/resources/demos/style.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <style>
 	.table.layout {
 		width: 1000px;
@@ -184,6 +183,14 @@
 		right: 8px;
 	}
 	
+	.modal-body {
+		margin: 0 auto;
+	}
+	
+	.ui-widget {
+		z-index:2147483647;
+	}
+	
 </style>
 </head>
 <body>
@@ -193,7 +200,7 @@
 		<section>
 		
 		<!-- Modal -->
-		<div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal fade" id="modal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		  <div class="modal-dialog modal-dialog-centered">
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -203,14 +210,14 @@
 		        </button>
 		      </div>
 		      <div class="modal-body">
-		        <div class="ui-widget">
-				  <label for="tags">Tags: </label>
-				  <input id="tags">
+		      	<div class="ui-widget">
+		      		<label for="invite-user" class="form-label">초대할 회원의 아이디<input type="text" id="invite-user" class="form-control"></label>
 				</div>
-		      </div>
+			  	
+			 </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-		        <button type="button" class="btn btn-primary">초대하기</button>
+		        <button type="button" class="btn btn-primary" id="invite-btn">초대하기</button>
 		      </div>
 		    </div>
 		  </div>
@@ -234,7 +241,7 @@
 						</c:forEach>
 						<span><img src="/planitshare/userimage/${pdto.authorProfile}" title="${pdto.author}"></span>
 						<c:if test="${auth.id == pdto.author}">
-						<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#staticBackdrop">+</button>
+						<button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#modal">+</button>
 						</c:if>
 					</td>
 				</tr>
@@ -299,9 +306,6 @@
 				</tr>
 				</c:forEach>
 				</c:forEach>
-				<tr>
-					
-				</tr>
 			</table>
 			
 			<c:if test="${not empty auth}">
@@ -428,6 +432,46 @@
 			location.href='/planitshare/plan/view/delete.do?seq=' + seq;
 		}
 	}
+	
+	let idList = [];
+	
+	<c:forEach var="id" items="${idList}">
+		idList.push("${id}");
+	</c:forEach>
+	
+	$( function() {
+	    $( "#invite-user" ).autocomplete({
+	      source: idList
+	    });
+	  } );
+	
+	  // modal이 열릴 때 다시 영역 한정 (appendTo 옵션)
+	  $("#modal").on("shown.bs.modal", function() {
+	    $("#tags").autocomplete("option", "appendTo", "#modal")
+	  })
+	  
+	  $('#invite-btn').click(function() {
+		 
+		 $.ajax({
+			type: 'GET',
+			url: '/planitshare/plan/view/invite.do',
+			data: 'pseq=${pdto.seq}' + '&id=' + $('#invite-user').val() + '&host=${pdto.author}',
+			dataType: 'json',
+			success: function(result) {
+				
+				if (result.result == "1") {
+					alert('초대 성공');
+					$('#invite-user').val('');
+				} else {
+					alert('올바르지 않은 아이디입니다.');
+				}
+			},
+			error: function(a, b, c) {
+				console.log(a, b, c);
+			}
+				
+		 });
+	  });
 	
 	</script>
 

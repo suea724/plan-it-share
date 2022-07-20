@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import com.project.tour.DBUtil;
 import com.project.tour.dto.CommentDTO;
 import com.project.tour.dto.DayDTO;
+import com.project.tour.dto.InvitationDTO;
 import com.project.tour.dto.PlaceDTO;
 import com.project.tour.dto.PlanDTO;
 import com.project.tour.dto.PlanUserDTO;
@@ -570,6 +571,66 @@ public class PlanDAO {
 		} finally {
 			DBUtil.close();
 		}
+		return 0;
+	}
+
+	public ArrayList<String> getIdList(String seq, String id) {
+		
+		try {
+			
+			conn = DBUtil.open();
+			
+			String sql = "select * from tblUser where id not in (select u.id from tblUser u inner join tblPlanUser pu on u.id = pu.id where pseq = ?) and id != ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, seq);
+			pstmt.setString(2, id);
+			
+			rs = pstmt.executeQuery();
+			
+			ArrayList<String> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				list.add(rs.getString("id"));
+			}
+			return list;
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.getIdList");
+			e.printStackTrace();
+
+		} finally {
+			DBUtil.close();
+		}
+		
+		return null;
+	}
+
+	public int makeInvite(InvitationDTO dto) {
+		
+		try {
+			
+			conn = DBUtil.open();
+			
+			String sql = "insert into tblInvitation values (seqInvitation.nextval, ?, ?, ?, default)";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getPseq());
+			pstmt.setString(2, dto.getHost());
+			pstmt.setString(3, dto.getGuest());
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.makeInvite");
+			e.printStackTrace();
+
+		} finally {
+			DBUtil.close();
+		}
+		
 		return 0;
 	}
 
