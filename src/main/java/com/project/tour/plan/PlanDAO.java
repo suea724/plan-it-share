@@ -13,6 +13,7 @@ import com.project.tour.dto.CommentDTO;
 import com.project.tour.dto.DayDTO;
 import com.project.tour.dto.PlaceDTO;
 import com.project.tour.dto.PlanDTO;
+import com.project.tour.dto.PlanUserDTO;
 
 public class PlanDAO {
 	
@@ -311,7 +312,7 @@ public class PlanDAO {
 			
 			
 		} catch (Exception e) {
-			System.out.println("FoodDAO.deleteLike");
+			System.out.println("PlanDAO.addComment");
 			e.printStackTrace();
 
 		} finally {
@@ -332,9 +333,240 @@ public class PlanDAO {
 			return pstmt.executeUpdate();
 			
 		} catch (Exception e) {
-			System.out.println("FoodDAO.deleteLike");
+			System.out.println("PlanDAO.delComment");
 			e.printStackTrace();
 
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+
+	public int delDaily(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblDaily where pseq = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delDaily");
+			e.printStackTrace();
+
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+	
+	public int delComments(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblComment where pseq = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delComments");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+	
+	public int delPlanUser(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblPlanUser where pseq = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delPlanUser");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+	
+	public int delInvitation(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblInvitation where pseq = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delInvitation");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+
+	public int delLike(String seq) {
+
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblLikePlan where pseq = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delLike");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+		
+	}
+
+	public int delPlan(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblPlan where seq = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delPlan");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+		
+	}
+
+	public ArrayList<PlanUserDTO> getPlanUser(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "select u.id, u.profile from tblplanuser pu inner join tblUser u on pu.id = u.id where pseq = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			rs = pstmt.executeQuery();
+			
+			ArrayList<PlanUserDTO> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				PlanUserDTO dto = new PlanUserDTO();
+				
+				dto.setId(rs.getString("id"));
+				dto.setProfile(rs.getString("profile"));
+				
+				list.add(dto);
+			}
+			return list;
+			
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.getPlanUser");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return null;
+	}
+
+	public int delDailyFood(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblDailyFood where dseq in (select distinct dseq from tblDaily d inner join tblDailyFood df on d.seq = df.dseq where d.pseq = ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delDailyFood");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+	
+	public int delDailyLodging(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblDailyLodging where dseq in (select distinct dseq from tblDaily d inner join tblDailyLodging dl on d.seq = dl.dseq where d.pseq = ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delDailyLodging");
+			e.printStackTrace();
+			
+		} finally {
+			DBUtil.close();
+		}
+		return 0;
+	}
+	
+	public int delDailyTour(String seq) {
+		
+		try {
+			conn = DBUtil.open();
+			
+			String sql = "delete from tblDailyTour where dseq in (select distinct dseq from tblDaily d inner join tblDailyTour dt on d.seq = dt.dseq where d.pseq = ?)";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, seq);
+			
+			return pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			System.out.println("PlanDAO.delDailyTour");
+			e.printStackTrace();
+			
 		} finally {
 			DBUtil.close();
 		}
