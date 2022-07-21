@@ -121,7 +121,9 @@
 		width: 700px;
 	}
 	
-	
+	#header-menu li:nth-child(2) a {
+		color: #6DA2DF
+	}
 </style>
 <script src="/planitshare/asset/js/jquery.rateit.js"></script>
 <link rel="stylesheet" href="/planitshare/asset/css/rateit.css"/>

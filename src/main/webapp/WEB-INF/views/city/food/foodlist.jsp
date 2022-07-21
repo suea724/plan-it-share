@@ -93,6 +93,14 @@
 	#food-info {
 		margin-top: 30px;
 	}
+	
+	h1 {
+		text-align: center;
+	}
+	
+	#header-menu li:nth-child(2) a {
+		color: #6DA2DF
+	}
 </style>
 </head>
 <body>
@@ -118,6 +126,10 @@
 				<input type="text" name="keyword" id="" class="form-control" placeholder="검색어를 입력해주세요."/>
 				<button type="button" class="btn btn-secondary" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
+			
+			<c:if test="${empty keyword}">
+			<h1>인기 음식점</h1>
+			</c:if>
 			
 			<!-- 리스트 출력 -->
 			<c:forEach var="dto" items="${list}">
