@@ -22,9 +22,11 @@ public class AdminDAO {
 	
 	Connection conn = null;
 	ResultSet rs = null;
-	PreparedStatement pstmt = null;
-	Statement stmt = null;
+	PreparedStatement pstat = null;
+	Statement stat = null;
 
+	//===================================================수아 DAO 시작==================================================
+	
 	/**
 	 * 전체 숙소 리스트를 가져오는 메서드
 	 * 
@@ -35,16 +37,15 @@ public class AdminDAO {
 	public ArrayList<AdminLodgingDTO> listLodging(int page) {
 		
 		try {
-			conn = DBUtil.open();
 			
 			int begin = (page - 1) * 20 + 1; 
 			int end = page * 20;
 			
 			String sql = "select * from (select rownum as rnum, a.* from (select l.seq, c.name as city, lc.category, l.name, l.address, l.image, l.checkin, l.checkout  from tblLodging l inner join tblCity c on c.seq = l.cseq inner join tblLodgingCategory lc on l.lcseq = lc.seq order by l.seq desc) a) where rnum between ? and ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, begin);
-			pstmt.setInt(2, end);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, begin);
+			pstat.setInt(2, end);
+			rs = pstat.executeQuery();
 			
 			ArrayList<AdminLodgingDTO> list = new ArrayList<AdminLodgingDTO>();
 			
@@ -75,9 +76,7 @@ public class AdminDAO {
 			System.out.println("AdminDAO.listLodging");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -92,16 +91,14 @@ public class AdminDAO {
 	public ArrayList<AdminTourDTO> listTour(int page) {
 		try {
 			
-			conn = DBUtil.open();
-			
 			int begin = (page - 1) * 20 + 1; 
 			int end = page * 20;
 			
 			String sql = "select * from (select rownum as rnum, a.* from (select t.seq, c.name as city, tc.category, t.placename, t.address, t.image, t.open, t.close  from tblTour t inner join tblCity c on c.seq = t.cseq inner join tblTourCategory tc on t.tcseq = tc.seq order by t.seq desc) a) where rnum between ? and ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, begin);
-			pstmt.setInt(2, end);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, begin);
+			pstat.setInt(2, end);
+			rs = pstat.executeQuery();
 			
 			ArrayList<AdminTourDTO> list = new ArrayList<AdminTourDTO>();
 			
@@ -130,9 +127,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.listTour");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -147,16 +142,14 @@ public class AdminDAO {
 	public ArrayList<AdminFoodDTO> listFood(int page) {
 		try {
 			
-			conn = DBUtil.open();
-			
 			int begin = (page - 1) * 20 + 1; 
 			int end = page * 20;
 			
 			String sql = "select * from (select rownum as rnum, a.* from (select f.seq, c.name as city, fc.category, f.name, f.address, f.image, f.open, f.close  from tblFood f inner join tblCity c on c.seq = f.cseq inner join tblFoodCategory fc on f.fcseq = fc.seq order by f.seq desc) a) where rnum between ? and ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, begin);
-			pstmt.setInt(2, end);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setInt(1, begin);
+			pstat.setInt(2, end);
+			rs = pstat.executeQuery();
 			
 			ArrayList<AdminFoodDTO> list = new ArrayList<AdminFoodDTO>();
 			
@@ -185,9 +178,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.listFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -202,11 +193,9 @@ public class AdminDAO {
 		
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "select count(*) as cnt from tblLodging";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			if (rs.next()) {
 				return Integer.parseInt(rs.getString("cnt"));
@@ -217,9 +206,7 @@ public class AdminDAO {
 			System.out.println("AdminDAO.getTotalLodgingCnt");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return 0;
 	}
@@ -234,11 +221,9 @@ public class AdminDAO {
 		
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "select count(*) as cnt from tblTour";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			if (rs.next()) {
 				return Integer.parseInt(rs.getString("cnt"));
@@ -248,9 +233,7 @@ public class AdminDAO {
 			System.out.println("AdminDAO.getTotalTourCnt");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 	}
 
@@ -264,11 +247,9 @@ public class AdminDAO {
 		
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "select count(*) as cnt from tblFood";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			if (rs.next()) {
 				return Integer.parseInt(rs.getString("cnt"));
@@ -278,9 +259,7 @@ public class AdminDAO {
 			System.out.println("AdminDAO.getTotalFoodCnt");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 
 		return 0;
 	}
@@ -293,11 +272,9 @@ public class AdminDAO {
 	public ArrayList<String> getDistrincts() {
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "select distinct distrinct from tblCity";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			ArrayList<String> list = new ArrayList<>();
 			
@@ -310,9 +287,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.getDistirinct");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return null;
 	}
 
@@ -324,10 +299,9 @@ public class AdminDAO {
 	public ArrayList<LodgingCategoryDTO> getLodgingCategory() {
 		
 		try {
-			conn = DBUtil.open();
 			String sql = "select * from tblLodgingCategory";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			ArrayList<LodgingCategoryDTO> list = new ArrayList<>();
 			
@@ -346,9 +320,7 @@ public class AdminDAO {
 			System.out.println("AdminDAO.getLodgingCategory");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -361,11 +333,10 @@ public class AdminDAO {
 	public ArrayList<TourCategoryDTO> getTourCategory() {
 		
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "select * from tblTourCategory";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			ArrayList<TourCategoryDTO> list = new ArrayList<>();
 			
@@ -383,8 +354,6 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.getTourCategory");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
 		}
 		
 		return null;
@@ -398,11 +367,10 @@ public class AdminDAO {
 	public ArrayList<FoodCategoryDTO> getFoodCategory() {
 		
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "select * from tblFoodCategory";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			ArrayList<FoodCategoryDTO> list = new ArrayList<>();
 			
@@ -420,9 +388,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.getFoodCategory");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return null;
 	}
 
@@ -435,12 +401,11 @@ public class AdminDAO {
 	public ArrayList<CityDTO> getCities(String distrinct) {
 
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "select * from tblCity where distrinct = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, distrinct);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, distrinct);
+			rs = pstat.executeQuery();
 			
 			ArrayList<CityDTO> list = new ArrayList<>();
 			
@@ -459,9 +424,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.getCities");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -475,41 +438,38 @@ public class AdminDAO {
 	public int addLodging(LodgingDTO dto) {
 		
 		try {
-			conn = DBUtil.open();
 			
 			if (dto.getImage() != null) {
 				
 				String sql = "insert into tblLodging values (seqLodging.nextVal, ?, ?, ?, ?, ?, ?, ?, null, null)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getName());
-				pstmt.setString(2, dto.getAddress());
-				pstmt.setString(3, dto.getLcseq());
-				pstmt.setString(4, dto.getCseq());
-				pstmt.setString(5, dto.getImage());
-				pstmt.setString(6, dto.getCheckin());
-				pstmt.setString(7, dto.getCheckout());
+				pstat.setString(1, dto.getName());
+				pstat.setString(2, dto.getAddress());
+				pstat.setString(3, dto.getLcseq());
+				pstat.setString(4, dto.getCseq());
+				pstat.setString(5, dto.getImage());
+				pstat.setString(6, dto.getCheckin());
+				pstat.setString(7, dto.getCheckout());
 				
 			} else {
 				String sql = "insert into tblLodging values (seqLodging.nextVal, ?, ?, ?, ?, default, ?, ?, null, null)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getName());
-				pstmt.setString(2, dto.getAddress());
-				pstmt.setString(3, dto.getLcseq());
-				pstmt.setString(4, dto.getCseq());
-				pstmt.setString(5, dto.getCheckin());
-				pstmt.setString(6, dto.getCheckout());
+				pstat.setString(1, dto.getName());
+				pstat.setString(2, dto.getAddress());
+				pstat.setString(3, dto.getLcseq());
+				pstat.setString(4, dto.getCseq());
+				pstat.setString(5, dto.getCheckin());
+				pstat.setString(6, dto.getCheckout());
 			}
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 	}
 
@@ -521,42 +481,39 @@ public class AdminDAO {
 	 */
 	public int addFood(FoodDTO dto) {
 		try {
-			conn = DBUtil.open();
 			
 			if (dto.getImage() != null) {
 				
 				String sql = "insert into tblFood values (seqFood.nextVal, ?, ?, ?, ?, ?, ?, ?, null, null)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getName());
-				pstmt.setString(2, dto.getAddress());
-				pstmt.setString(3, dto.getOpen());
-				pstmt.setString(4, dto.getClose());
-				pstmt.setString(5, dto.getFcseq());
-				pstmt.setString(6, dto.getCseq());
-				pstmt.setString(7, dto.getImage());
+				pstat.setString(1, dto.getName());
+				pstat.setString(2, dto.getAddress());
+				pstat.setString(3, dto.getOpen());
+				pstat.setString(4, dto.getClose());
+				pstat.setString(5, dto.getFcseq());
+				pstat.setString(6, dto.getCseq());
+				pstat.setString(7, dto.getImage());
 				
 			} else {
 				
 				String sql = "insert into tblFood values (seqFood.nextVal, ?, ?, ?, ?, ?, ?, default, null, null)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getName());
-				pstmt.setString(2, dto.getAddress());
-				pstmt.setString(3, dto.getOpen());
-				pstmt.setString(4, dto.getClose());
-				pstmt.setString(5, dto.getFcseq());
-				pstmt.setString(6, dto.getCseq());
+				pstat.setString(1, dto.getName());
+				pstat.setString(2, dto.getAddress());
+				pstat.setString(3, dto.getOpen());
+				pstat.setString(4, dto.getClose());
+				pstat.setString(5, dto.getFcseq());
+				pstat.setString(6, dto.getCseq());
 			}
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 	}
 
@@ -568,115 +525,100 @@ public class AdminDAO {
 	 */
 	public int addTour(TourDTO dto) {
 		try {
-			conn = DBUtil.open();
 			
 			if (dto.getImage() != null) {
 				
 				String sql = "insert into tblTour values (seqTour.nextVal, ?, ?, ?, ?, ?, ?, ?, null, null)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getPlaceName());
-				pstmt.setString(2, dto.getAddress());
-				pstmt.setString(3, dto.getOpen());
-				pstmt.setString(4, dto.getClose());
-				pstmt.setString(5, dto.getTcseq());
-				pstmt.setString(6, dto.getCseq());
-				pstmt.setString(7, dto.getImage());
+				pstat.setString(1, dto.getPlaceName());
+				pstat.setString(2, dto.getAddress());
+				pstat.setString(3, dto.getOpen());
+				pstat.setString(4, dto.getClose());
+				pstat.setString(5, dto.getTcseq());
+				pstat.setString(6, dto.getCseq());
+				pstat.setString(7, dto.getImage());
 				
 			} else {
 				String sql = "insert into tblTour values (seqTour.nextVal, ?, ?, ?, ?, ?, ?, default, null, null)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getPlaceName());
-				pstmt.setString(2, dto.getAddress());
-				pstmt.setString(3, dto.getOpen());
-				pstmt.setString(4, dto.getClose());
-				pstmt.setString(5, dto.getTcseq());
-				pstmt.setString(6, dto.getCseq());
+				pstat.setString(1, dto.getPlaceName());
+				pstat.setString(2, dto.getAddress());
+				pstat.setString(3, dto.getOpen());
+				pstat.setString(4, dto.getClose());
+				pstat.setString(5, dto.getTcseq());
+				pstat.setString(6, dto.getCseq());
 			}
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 	}
 
 	public void delFoodReviews(String seq) {
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblFoodReview where fseq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			pstmt.executeUpdate();
+			pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 	}
 	
 	public void delTourReviews(String seq) {
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblTourReview where tseq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			pstmt.executeUpdate();
+			pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 	}
 	
 	public void delLodgingReviews(String seq) {
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblLodgingReview where lseq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			pstmt.executeUpdate();
+			pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
 		}
 	}
 
 	public int delFood(String seq) {
 		
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblFood where seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return 0;
 		
@@ -685,20 +627,17 @@ public class AdminDAO {
 	public int delTour(String seq) {
 		
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblTour where seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 		
 	}
@@ -706,86 +645,73 @@ public class AdminDAO {
 	public int delLodging(String seq) {
 		
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblLodging where seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.addLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 	}
 
 	public void delLikeFood(String seq) {
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblLikeFood where fseq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			pstmt.executeUpdate();
+			pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.delLikeFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 	}
 	
 	public void delLikeTour(String seq) {
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblLikeTour where tseq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			pstmt.executeUpdate();
+			pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.delLikeFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 	}
 	
 	public void delLikeLodging(String seq) {
 		try {
-			conn = DBUtil.open();
 			
-			String sql = "delete from tblLikeLodging where lseq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			String sql = "delete from tblLikeLodging where 'lseq' = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			pstmt.executeUpdate();
+			pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.delLikeFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 	}
 
 	public FoodDTO getFood(String seq) {
 		
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "select f.seq, f.name, f.address, f.open, f.close, f.fcseq, f.cseq, f.image, c.distrinct from tblFood f inner join tblCity c on f.cseq = c.seq where f.seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
 
 			FoodDTO dto = new FoodDTO();
 			
@@ -807,9 +733,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.delLikeFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -817,12 +741,11 @@ public class AdminDAO {
 	public LodgingDTO getLodging(String seq) {
 		
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "select l.seq, l.name, l.address, l.checkin, l.checkout, l.lcseq, l.cseq, l.image, c.distrinct from tblLodging l inner join tblCity c on l.cseq = c.seq where l.seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
 			
 			LodgingDTO dto = new LodgingDTO();
 			
@@ -844,9 +767,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.delLikeFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -854,12 +775,10 @@ public class AdminDAO {
 	public TourDTO getTour(String seq) {
 		
 		try {
-			conn = DBUtil.open();
-			
 			String sql = "select t.seq, t.placename, t.address, t.open, t.close, t.tcseq, t.cseq, t.image, c.distrinct from tblTour t inner join tblCity c on t.cseq = c.seq where t.seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
 			
 			TourDTO dto = new TourDTO();
 			
@@ -881,9 +800,7 @@ public class AdminDAO {
 		} catch (Exception e) {
 			System.out.println("AdminDAO.delLikeFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -891,28 +808,23 @@ public class AdminDAO {
 	public int updateLodging(LodgingDTO dto) {
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "update tblLodging set name = ?, lcseq = ?, cseq = ?, checkin = ?, checkout = ?, address = ? where seq = ?";
-			pstmt = conn.prepareStatement(sql);
+			pstat = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, dto.getName());
-			pstmt.setString(2, dto.getLcseq());
-			pstmt.setString(3, dto.getCseq());
-			pstmt.setString(4, dto.getCheckin());
-			pstmt.setString(5, dto.getCheckout());
-			pstmt.setString(6, dto.getAddress());
-			pstmt.setString(7, dto.getSeq());
+			pstat.setString(1, dto.getName());
+			pstat.setString(2, dto.getLcseq());
+			pstat.setString(3, dto.getCseq());
+			pstat.setString(4, dto.getCheckin());
+			pstat.setString(5, dto.getCheckout());
+			pstat.setString(6, dto.getAddress());
+			pstat.setString(7, dto.getSeq());
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.updateLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.open();
-		}
-		
+		} 
 		return 0;
 	}
 
@@ -920,27 +832,23 @@ public class AdminDAO {
 		
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "update tblFood set name = ?, fcseq = ?, cseq = ?, open = ?, close = ?, address = ? where seq = ?";
-			pstmt = conn.prepareStatement(sql);
+			pstat = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, dto.getName());
-			pstmt.setString(2, dto.getFcseq());
-			pstmt.setString(3, dto.getCseq());
-			pstmt.setString(4, dto.getOpen());
-			pstmt.setString(5, dto.getClose());
-			pstmt.setString(6, dto.getAddress());
-			pstmt.setString(7, dto.getSeq());
+			pstat.setString(1, dto.getName());
+			pstat.setString(2, dto.getFcseq());
+			pstat.setString(3, dto.getCseq());
+			pstat.setString(4, dto.getOpen());
+			pstat.setString(5, dto.getClose());
+			pstat.setString(6, dto.getAddress());
+			pstat.setString(7, dto.getSeq());
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.updateFood");
 			e.printStackTrace();
-		} finally {
-			DBUtil.open();
-		}
+		} 
 		
 		return 0;
 	}
@@ -949,32 +857,28 @@ public class AdminDAO {
 		
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "update tblTour set placename = ?, tcseq = ?, cseq = ?, open = ?, close = ?, address = ? where seq = ?";
-			pstmt = conn.prepareStatement(sql);
+			pstat = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, dto.getPlaceName());
-			pstmt.setString(2, dto.getTcseq());
-			pstmt.setString(3, dto.getCseq());
-			pstmt.setString(4, dto.getOpen());
-			pstmt.setString(5, dto.getClose());
-			pstmt.setString(6, dto.getAddress());
-			pstmt.setString(7, dto.getSeq());
+			pstat.setString(1, dto.getPlaceName());
+			pstat.setString(2, dto.getTcseq());
+			pstat.setString(3, dto.getCseq());
+			pstat.setString(4, dto.getOpen());
+			pstat.setString(5, dto.getClose());
+			pstat.setString(6, dto.getAddress());
+			pstat.setString(7, dto.getSeq());
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("AdminDAO.updateLodging");
 			e.printStackTrace();
-		} finally {
-			DBUtil.open();
-		}
+		} 
 		
 		return 0;
 	}
 	
-	
+	//===================================================수아 DAO 끝==================================================
 	
 
 }

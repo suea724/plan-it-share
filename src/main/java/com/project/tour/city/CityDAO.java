@@ -12,19 +12,19 @@ import com.project.tour.dto.CityDTO;
 public class CityDAO {
 	
 	Connection conn = null;
-	PreparedStatement pstmt = null;
-	Statement stmt = null;
+	PreparedStatement pstat = null;
+	Statement stat = null;
 	ResultSet rs = null;
 	
 	public CityDAO() {
 		conn = DBUtil.open();
 	}
-
+	// ===================================================수아 DAO 시작===============================================
 	public ArrayList<CityDTO> findMainCity() {
 		try {
 			String sql = "select * from tblCity where distrinct = \'주요도시\'";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			ArrayList<CityDTO> list = new ArrayList<CityDTO>();
 			
@@ -54,9 +54,9 @@ public class CityDAO {
 		try {
 			
 			String sql = "select * from tblCity where seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, cseq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery();
 			
 			CityDTO dto = new CityDTO();
 			
@@ -77,7 +77,7 @@ public class CityDAO {
 		
 		return null;
 	}
-	
+	// ===================================================수아 DAO 끝===============================================	
 	
 
 }

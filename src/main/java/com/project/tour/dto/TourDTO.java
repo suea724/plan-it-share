@@ -18,4 +18,15 @@ public class TourDTO {
 	
 	private String lat;
 	private String lng;
+	
+   private String place;
+   private String category;
+	   
+    private String likeCnt;
+    private String reviewCnt;
+    private String reviewAvg;
+   
+   
+    private String keyword;
+	   
 }

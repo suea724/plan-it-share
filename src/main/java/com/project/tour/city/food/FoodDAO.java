@@ -13,13 +13,15 @@ import com.project.tour.dto.FoodReviewDTO;
 public class FoodDAO {
 	
 	Connection conn = null;
-	PreparedStatement pstmt = null;
-	Statement stmt = null;
+	PreparedStatement pstat = null;
+	Statement stat = null;
 	ResultSet rs = null;
 	
 	public FoodDAO() {
 		conn = DBUtil.open();
 	}
+	
+	// ===================================================수아 DAO 시작===============================================
 	
 	/**
 	 * 
@@ -32,8 +34,6 @@ public class FoodDAO {
 	 */
 	public ArrayList<FoodDTO> listFood(String cseq, int page) {
 		
-		conn = DBUtil.open();
-		
 		int begin = (page - 1) * 10 + 1; 
 		int end = page * 10;
 		
@@ -44,12 +44,12 @@ public class FoodDAO {
 					+ "from tblFood f inner join tblCity c on f.cseq = c.seq\r\n"
 					+ "        inner join tblFoodCategory fc on f.fcseq = fc.seq where c.seq = ? order by likecnt desc) a) where rnum between ? and ?";
 			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, cseq);
-			pstmt.setInt(2, begin);
-			pstmt.setInt(3, end);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			pstat.setInt(2, begin);
+			pstat.setInt(3, end);
 			
-			rs = pstmt.executeQuery();
+			rs = pstat.executeQuery();
 			
 			ArrayList<FoodDTO> list = new ArrayList<>();
 			
@@ -76,9 +76,8 @@ public class FoodDAO {
 			System.out.println("FoodDAO.listFood");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
+		
 		return null;
 	}
 
@@ -91,16 +90,14 @@ public class FoodDAO {
 	 */
 	public FoodDTO findFood(String seq) {
 		
-		conn = DBUtil.open();
-		
 		try {
 			String sql = "select f.seq, f.name, f.address, f.open, f.close, f.image, fc.category, (select count(*) from tblLikeFood lf where lf.fseq = f.seq) as likecnt, (select count(*) from tblFoodReview fr where fr.fseq = f.seq) as reviewcnt, (select avg(star) from tblFoodReview fr where fr.fseq = f.seq) as reviewavg\r\n"
 					+ "from tblFood f inner join tblCity c on f.cseq = c.seq\r\n"
 					+ "inner join tblFoodCategory fc on f.fcseq = fc.seq where f.seq = ?";
 			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
 			
 			FoodDTO dto = new FoodDTO();
 			
@@ -122,9 +119,7 @@ public class FoodDAO {
 			System.out.println("FoodDAO.findFood");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return null;
 	}
 
@@ -137,13 +132,11 @@ public class FoodDAO {
 	 */
 	public int getTotalCount(String cseq) {
 		
-		conn = DBUtil.open();
-		
 		try {
 			String sql = "select count(*) as cnt from tblFood where cseq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, cseq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery();
 			
 			if (rs.next()) {
 				return Integer.parseInt(rs.getString("cnt"));	
@@ -153,9 +146,7 @@ public class FoodDAO {
 			System.out.println("FoodDAO.getTotalCount");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return 0;
 	}
@@ -169,13 +160,11 @@ public class FoodDAO {
 	 */
 	public ArrayList<FoodReviewDTO> findReviews(String seq) {
 		
-		conn = DBUtil.open();
-		
 		try {
 			String sql = "select * from tblFoodReview where fseq = ? order by seq desc";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
 			
 			ArrayList<FoodReviewDTO> list = new ArrayList<>();
 			
@@ -198,9 +187,7 @@ public class FoodDAO {
 			System.out.println("FoodDAO.findReviews");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return null;
 	}
 
@@ -213,39 +200,35 @@ public class FoodDAO {
 	 */
 	public int addReview(FoodReviewDTO dto) {
 		
-		conn = DBUtil.open();
-		
 		try {
 			
 			if (dto.getImage() != null) {
 				String sql = "insert into tblFoodReview values(seqFoodReview.nextVal, ?, ?, default, ?, ?, ?)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getContent());
-				pstmt.setString(2, dto.getStar());
-				pstmt.setString(3, dto.getId());
-				pstmt.setString(4, dto.getFseq());
-				pstmt.setString(5, dto.getImage());
+				pstat.setString(1, dto.getContent());
+				pstat.setString(2, dto.getStar());
+				pstat.setString(3, dto.getId());
+				pstat.setString(4, dto.getFseq());
+				pstat.setString(5, dto.getImage());
 				
 			} else {
 				String sql = "insert into tblFoodReview values(seqFoodReview.nextVal, ?, ?, default, ?, ?, null)";
-				pstmt = conn.prepareStatement(sql);
+				pstat = conn.prepareStatement(sql);
 				
-				pstmt.setString(1, dto.getContent());
-				pstmt.setString(2, dto.getStar());
-				pstmt.setString(3, dto.getId());
-				pstmt.setString(4, dto.getFseq());
+				pstat.setString(1, dto.getContent());
+				pstat.setString(2, dto.getStar());
+				pstat.setString(3, dto.getId());
+				pstat.setString(4, dto.getFseq());
 			}
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("FoodDAO.addReview");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 	}
 
@@ -257,12 +240,10 @@ public class FoodDAO {
 	 */
 	public FoodReviewDTO getLatestReivew() {
 		
-		conn = DBUtil.open();
-		
 		try {
 			String sql = "select * from tblFoodReview where seq = (select max(seq) from tblFoodReview)";
-			stmt = conn.createStatement();
-			rs = stmt.executeQuery(sql);
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
 			
 			FoodReviewDTO dto = new FoodReviewDTO();
 			
@@ -279,9 +260,7 @@ public class FoodDAO {
 		} catch (Exception e) {
 			System.out.println("FoodDAO.getLatestReivew");
 			e.printStackTrace();
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -297,8 +276,6 @@ public class FoodDAO {
 	 */
 	public ArrayList<FoodDTO> searchByName(String cseq, String keyword, int page) {
 		
-		conn = DBUtil.open();
-		
 		try {
 			
 			int begin = (page - 1) * 10 + 1; 
@@ -310,13 +287,13 @@ public class FoodDAO {
 					+ "from tblFood f inner join tblCity c on f.cseq = c.seq\r\n"
 					+ "inner join tblFoodCategory fc on f.fcseq = fc.seq where c.seq = ? and f.name like '%%%s%%' order by likecnt desc) a) where rnum between ? and ?", keyword);
 			
-			pstmt = conn.prepareStatement(sql);
+			pstat = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, cseq);
-			pstmt.setInt(2, begin);
-			pstmt.setInt(3, end);
+			pstat.setString(1, cseq);
+			pstat.setInt(2, begin);
+			pstat.setInt(3, end);
 			
-			rs = pstmt.executeQuery();
+			rs = pstat.executeQuery();
 			
 			ArrayList<FoodDTO> list = new ArrayList<>();
 			
@@ -343,9 +320,7 @@ public class FoodDAO {
 			System.out.println("FoodDAO.searchByName");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return null;
 	}
@@ -361,8 +336,6 @@ public class FoodDAO {
 	 */
 	public ArrayList<FoodDTO> searchByCategory(String cseq, String keyword, int page) {
 		
-		conn = DBUtil.open();
-		
 			try {
 			
 			int begin = (page - 1) * 10 + 1; 
@@ -374,13 +347,13 @@ public class FoodDAO {
 					+ "from tblFood f inner join tblCity c on f.cseq = c.seq\r\n"
 					+ "        inner join tblFoodCategory fc on f.fcseq = fc.seq where c.seq = ? and fc.category like '%%%s%%' order by likecnt desc) a) where rnum between ? and ?", keyword);
 			
-			pstmt = conn.prepareStatement(sql);
+			pstat = conn.prepareStatement(sql);
 			
-			pstmt.setString(1, cseq);
-			pstmt.setInt(2, begin);
-			pstmt.setInt(3, end);
+			pstat.setString(1, cseq);
+			pstat.setInt(2, begin);
+			pstat.setInt(3, end);
 			
-			rs = pstmt.executeQuery();
+			rs = pstat.executeQuery();
 			
 			ArrayList<FoodDTO> list = new ArrayList<>();
 			
@@ -406,8 +379,6 @@ public class FoodDAO {
 			System.out.println("FoodDAO.searchByCategory");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
 		}
 		
 		return null;
@@ -423,17 +394,15 @@ public class FoodDAO {
 	 */
 	public int getSearchByNameCount(String cseq, String keyword) {
 		
-		conn = DBUtil.open();
-
 		try {
 			String sql = "select count(*) as cnt from (select rownum as rnum,a.* from\r\n"
 					+ "(select\r\n"
 					+ "f.seq, f.name, f.address, f.open, f.close, f.image, f.cseq, fc.category, (select count(*) from tblLikeFood lf where lf.fseq = f.seq) as likecnt, (select count(*) from tblFoodReview fr where fr.fseq = f.seq) as reviewcnt, (select avg(star) from tblFoodReview fr where fr.fseq = f.seq) as reviewavg\r\n"
 					+ "from tblFood f inner join tblCity c on f.cseq = c.seq\r\n"
 					+ "        inner join tblFoodCategory fc on f.fcseq = fc.seq where c.seq = ? and f.name like '%%?%%' order by likecnt desc) a)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, cseq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery();
 			
 			if (rs.next()) {
 				return Integer.parseInt(rs.getString("cnt"));	
@@ -443,9 +412,7 @@ public class FoodDAO {
 			System.out.println("FoodDAO.getSearchByNameCount");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return 0;
 		
@@ -461,17 +428,15 @@ public class FoodDAO {
 	 */
 	public int getSearchByCategoryCount(String cseq, String keyword) {
 		
-		conn = DBUtil.open();
-
 		try {
 			String sql = "select count(*) as cnt from (select rownum as rnum,a.* from\r\n"
 					+ "(select\r\n"
 					+ "f.seq, f.name, f.address, f.open, f.close, f.image, f.cseq, fc.category, (select count(*) from tblLikeFood lf where lf.fseq = f.seq) as likecnt, (select count(*) from tblFoodReview fr where fr.fseq = f.seq) as reviewcnt, (select avg(star) from tblFoodReview fr where fr.fseq = f.seq) as reviewavg\r\n"
 					+ "from tblFood f inner join tblCity c on f.cseq = c.seq\r\n"
 					+ "        inner join tblFoodCategory fc on f.fcseq = fc.seq where c.seq = ? and fc.category like '%%?%%' order by likecnt desc) a)";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, cseq);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery();
 			
 			if (rs.next()) {
 				return Integer.parseInt(rs.getString("cnt"));	
@@ -481,9 +446,7 @@ public class FoodDAO {
 			System.out.println("FoodDAO.getSearchByNameCount");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		
 		return 0;
 		
@@ -492,13 +455,11 @@ public class FoodDAO {
 	public int findLike(String seq, String id) {
 		try {
 			
-			conn = DBUtil.open();
-			
 			String sql = "select count(*) as cnt from tblFood f inner join tblLikeFood lf on lf.fseq = f.seq where fseq = ? and id = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
-			pstmt.setString(2, id);
-			rs = pstmt.executeQuery();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			pstat.setString(2, id);
+			rs = pstat.executeQuery();
 			
 			if (rs.next()) {
 				return Integer.parseInt(rs.getString("cnt")); 
@@ -508,74 +469,66 @@ public class FoodDAO {
 			System.out.println("FoodDAO.findLike");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 	}
 
 	public int deleteLike(String seq, String id) {
 		try {
-			conn = DBUtil.open();
 			String sql = "delete from tblLikeFood where fseq = ? and id = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
-			pstmt.setString(2, id);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			pstat.setString(2, id);
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("FoodDAO.deleteLike");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
+		
 		return 0;
 	}
 
 	public int insertLike(String seq, String id) {
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "insert into tblLikeFood values (seqLikeFood.nextVal, ?, ?)";
 			
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, id);
-			pstmt.setString(2, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, id);
+			pstat.setString(2, seq);
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 			
 		} catch (Exception e) {
 			System.out.println("FoodDAO.deleteLike");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
-		}
+		} 
 		return 0;
 		
 	}
 
 	public int delReview(String seq) {
 		try {
-			conn = DBUtil.open();
 			
 			String sql = "delete from tblFoodReview where seq = ?";
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, seq);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
 			
-			return pstmt.executeUpdate();
+			return pstat.executeUpdate();
 			
 		} catch (Exception e) {
 			System.out.println("FoodDAO.delReview");
 			e.printStackTrace();
 
-		} finally {
-			DBUtil.close();
 		}
+		
 		return 0;
 	}
+	// ===================================================수아 DAO 끝===============================================
 	
 }
