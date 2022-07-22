@@ -51,16 +51,7 @@
 	<main>
 		<%@ include file="/WEB-INF/views/inc/header.jsp" %>
 		<section>
-			<nav id="admin-submenu">
-				<ul>
-					<li><a href="">추천 여행지 관리</a></li>
-					<li><a href="">회원 조회</a></li>
-					<li><a href="">통계 확인</a></li>
-					<li><a href="/planitshare/adminpage/place.do">여행 장소 관리</a></li>
-					<li><a href="">일정 게시판 관리</a></li>
-					<li><a href="">금칙어 관리</a></li>
-				</ul>
-			</nav>
+			<%@ include file="/WEB-INF/views/inc/adminsubmenu.jsp" %>
 			
 			<form method="post" action="/planitshare/adminpage/place/add.do" enctype="multipart/form-data">
 				<table class="table table-borderless">

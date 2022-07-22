@@ -31,6 +31,7 @@ h2, #labels > span {
      height: 40px;
  }
  
+ 
  #login-btn {
      margin: 10px auto;
      
@@ -89,8 +90,8 @@ h2, #labels > span {
             </div>
             </form>
             <div id="labels">
-                <span><a href="/planitshare/idsearch.do">비밀번호 찾기</a></span>
-                <span><a href="/planitshare/pwsearch.do">아이디 찾기</a></span>
+                <span><a href="/planitshare/idsearch.do">아이디 찾기</a></span>
+                <span><a href="/planitshare/pwsearch.do">비밀번호 찾기</a></span>
                 <span><a href="/planitshare/register.do">회원가입</a></span>
             </div>
         </div>

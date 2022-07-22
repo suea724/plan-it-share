@@ -4,6 +4,8 @@ import lombok.Data;
 
 @Data
 public class LodgingCategoryDTO {
+	
 	private String seq;
 	private String category;
+	
 }

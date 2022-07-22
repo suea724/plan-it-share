@@ -26,6 +26,7 @@ public class Login extends HttpServlet {
 
 	}
 
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
@@ -45,37 +46,45 @@ public class Login extends HttpServlet {
         
         UserDAO dao = new UserDAO();
         
-        
         if (dao.login(dto) instanceof AdminDTO) {
-        	
-        	AdminDTO adto = (AdminDTO)dao.login(dto);
-        	
-        	adto.setLoginmode(loginmode);
+            
+            AdminDTO adto = (AdminDTO)dao.login(dto);
+            
+            adto.setLoginmode(loginmode);
 
-            HttpSession session = req.getSession();
-            session.setAttribute("auth", adto);
+             HttpSession session = req.getSession();
+             session.setAttribute("auth", adto);
 
-            resp.sendRedirect("/planitshare/main.do");
-        	
+             resp.sendRedirect("/planitshare/main.do");
+            
 
-        } else if (dao.login(dto) instanceof UserDTO) {
-        	
-        	
-        	UserDTO udto = (UserDTO)dao.login(dto);
-        	
-            udto.setLoginmode(loginmode);
-        	  
-            HttpSession session = req.getSession();
-            session.setAttribute("auth", udto);
+         } else if (dao.login(dto) instanceof UserDTO) {
+            
+            
+            UserDTO udto = (UserDTO)dao.login(dto);
+            
+             udto.setLoginmode(loginmode);
+              
+             HttpSession session = req.getSession();
+             session.setAttribute("auth", udto);
 
-            resp.sendRedirect("/planitshare/main.do");
+             resp.sendRedirect("/planitshare/main.do");
 
-        } else {
-        	req.setAttribute("loginError", "y");
-            RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
-            dispatcher.forward(req, resp);
-        }
+         } else {
+            req.setAttribute("loginError", "y");
+             RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/login.jsp");
+             dispatcher.forward(req, resp);
+         }
+        
+        
+   
+        
+        
       
+
+		
+		
+
 	}
 
 }

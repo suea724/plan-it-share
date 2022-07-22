@@ -31,7 +31,7 @@ public class FoodList extends HttpServlet {
 		}
 		
 		CityDAO cdao = new CityDAO();
-		CityDTO cdto = cdao.findCity(cseq);
+		CityDTO dto = cdao.findCity(cseq);
 		
 		FoodDAO dao = new FoodDAO();
 		
@@ -60,9 +60,10 @@ public class FoodList extends HttpServlet {
 			}
 		}
 		
+		req.setAttribute("cseq", cseq);
 		req.setAttribute("pagination", pagination);
 		req.setAttribute("list", list);
-		req.setAttribute("cdto", cdto);
+		req.setAttribute("dto", dto);
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/city/food/foodlist.jsp");
 		dispatcher.forward(req, resp);

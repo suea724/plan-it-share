@@ -11,20 +11,27 @@
 </style>
 </head>
 <body>
-	
-	
-	<main>
-		<%@ include file="/WEB-INF/views/inc/header.jsp" %>
-		<section>
-			
-		</section>
-	
-	</main>
+   
+   
+   <main>
+      <%@ include file="/WEB-INF/views/inc/header.jsp" %>
+      <section>
+         
+      </section>
+   
+   </main>
 
 
-	<script>
-	
-	</script>
+   <script>
+      <c:if test="${res == 1}">
+      location.href = '/planitshare/admin/bannedwordlist.do';
+      </c:if>
+      
+      <c:if test="${res == 0}">
+      alert('잘못된 입력입니다.');
+      history.back();
+      </c:if>
+   </script>
 
 
 </body>

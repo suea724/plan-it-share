@@ -267,7 +267,7 @@
 				<tr>
 					<td id="map-box">
 						<div id="map" style="width:100%;height:350px;"></div>
-						<button class="btn btn-secondary btn-block" onclick="location.href='/planitshare/plan/planmap.do?seq=${pdto.seq}">지도 보기</button>
+						<button class="btn btn-secondary btn-block" type="button" onclick="location.href='/planitshare/plan/planmap.do?seq=${pdto.seq}'">지도 보기</button>
 					</td>
 					<td>
 						<table class="table table-bordered" id="plan">
@@ -347,7 +347,7 @@
 		
 	</main>
 	
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=20556ca02cd4b892c95aa13783a3e841"></script>
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=45bff8e1f05130c0cfcaa2b32275bf5e"></script>
 	<script>
 	var staticMapContainer  = document.getElementById('map'), // 이미지 지도를 표시할 div  
 	    staticMapOption = { 

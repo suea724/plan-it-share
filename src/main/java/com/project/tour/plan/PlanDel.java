@@ -55,7 +55,7 @@ public class PlanDel extends HttpServlet {
 			writer.println("<body>");
 			writer.println("<script>");
 			writer.println("alert('삭제 성공');");
-			writer.println("location.href='/planetshare/plan.do'");
+			writer.println("location.href='/planitshare/plan.do'");
 			writer.println("</script>");
 			writer.println("</body>");
 			writer.println("</html>");

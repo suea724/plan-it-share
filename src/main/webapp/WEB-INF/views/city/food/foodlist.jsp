@@ -108,15 +108,7 @@
 		<%@ include file="/WEB-INF/views/inc/header.jsp" %>
 		<section>
 		
-			<!-- 서브 메뉴 -->
-			<h2>${cdto.name}</h2>
-			<div id="city-submenu">
-				<span><a href="">홈</a></span>
-				<span><a href="">숙소</a></span>
-				<span><a href="">관광명소</a></span>
-				<span><a href="">음식점</a></span>
-				<span><a href="">${cdto.name}일정</a></span>
-			</div>
+			<%@ include file="/WEB-INF/views/inc/citysubmenu.jsp" %>
 			
 			<div id="search-box">
 				<select class="form-control" name="distinct">
@@ -160,17 +152,17 @@
                 <ul class="pagination">
                     <c:if test="${pagination.prev}">
                         <li class="page-item">
-                            <a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${pagination.currentPage - 1}" aria-label="Previous">
+                            <a class="page-link" href="/planitshare/city/food.do?cseq=${dto.seq}&page=${pagination.currentPage - 1}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                     </c:if>
                     <c:forEach begin="${pagination.beginPage}" end="${pagination.endPage}" var="index">
-                        <li class="page-item"><a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${index}">${index}</a></li>
+                        <li class="page-item"><a class="page-link" href="/planitshare/city/food.do?cseq=${dto.seq}&page=${index}">${index}</a></li>
                     </c:forEach>
                     <c:if test="${pagination.next}">
                         <li class="page-item">
-                            <a class="page-link" href="/planitshare/city/food.do?cseq=${cdto.seq}&page=${pagination.currentPage + 1}" aria-label="Next">
+                            <a class="page-link" href="/planitshare/city/food.do?cseq=${dto.seq}&page=${pagination.currentPage + 1}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -190,7 +182,7 @@
 	
 		$('#search-btn').click(function() {
 			
-			let cseq = <c:out value="${cdto.seq}" />
+			let cseq = <c:out value="${dto.seq}" />
 			let distinct = $('select[name=distinct] option:selected').val();
 			let keyword = $('input[name=keyword]').val();
 			
