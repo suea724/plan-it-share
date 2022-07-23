@@ -17,7 +17,7 @@ import com.project.tour.dto.TourLikeDTO;
 import com.project.tour.dto.TourReviewDTO;
 import com.project.tour.dto.UserDTO;
 
-@WebServlet("/city/tourview.do")
+@WebServlet("/city/tour/view.do")
 public class TourView extends HttpServlet {
 
 	@Override

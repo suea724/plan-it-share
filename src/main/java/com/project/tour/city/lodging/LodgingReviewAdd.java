@@ -23,10 +23,7 @@ public class LodgingReviewAdd extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		
-		
-		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/city/lodging/lodgingreview.jsp");
-
 		dispatcher.forward(req, resp);
 
 	}
@@ -34,9 +31,30 @@ public class LodgingReviewAdd extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		//
-		
 		HttpSession session = req.getSession();
+		
+		req.setCharacterEncoding("UTF-8");
+		
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html; charset=UTF-8");
+		
+		PrintWriter writer = resp.getWriter();
+		
+		if (session.getAttribute("auth") == null) {
+			
+			writer.println("<html>");
+			writer.println("<body>");
+			writer.println("<script>");
+			writer.println("alert('로그인 후 리뷰를 작성해주세요.');");
+			writer.println("location.href = '/planitshare/login.do';");
+			writer.println("</script>");
+			writer.println("<body>");
+			writer.println("</html>");
+			writer.close();
+			
+			return;
+			
+		}
 		
 		req.setCharacterEncoding("UTF-8");
 		
@@ -96,18 +114,11 @@ public class LodgingReviewAdd extends HttpServlet {
 		
 		int result = dao.addComment(dto);
 		
-    	resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html;");
-
-		
 		if (result == 1) {
 			
-			resp.sendRedirect(String.format("/planitshare/city/lodgingview.do?seq=%s", lseq));
+			resp.sendRedirect(String.format("/planitshare/city/lodging/view.do?seq=%s", lseq));
 			
 		} else {
-			
-			PrintWriter writer = resp.getWriter();
-			
 			
 			writer.println("<html>");
 			writer.println("<body>");

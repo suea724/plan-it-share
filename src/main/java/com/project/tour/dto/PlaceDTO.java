@@ -16,4 +16,5 @@ public class PlaceDTO {
 	
 	private String regdate;
 	private String day;
+
 }

@@ -15,7 +15,7 @@ import com.project.tour.dto.LodgingDTO;
 import com.project.tour.dto.LodgingReviewDTO;
 import com.project.tour.dto.UserDTO;
 
-@WebServlet("/city/lodgingview.do")
+@WebServlet("/city/lodging/view.do")
 public class LodgingView extends HttpServlet {
 
 	@Override
@@ -23,21 +23,16 @@ public class LodgingView extends HttpServlet {
 
 		HttpSession session = req.getSession();
 		
-		
 		String seq = req.getParameter("seq");
 		
 		LodgingDAO dao = new LodgingDAO();
-		
 		LodgingDTO dto = dao.get(seq);
 		
 		//댓글 목록 가져오기
 		ArrayList<LodgingReviewDTO> list  = dao.review(seq);
 		
-		//현재 로그인한 아이디 가져오기
-
 		
 		req.setAttribute("dto", dto);
-		
 		req.setAttribute("list", list);
 		
 	    if (session.getAttribute("auth") instanceof UserDTO) {
@@ -61,14 +56,8 @@ public class LodgingView extends HttpServlet {
 
 		dispatcher.forward(req, resp);
 	
-		
-
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-	}
 
 }
 

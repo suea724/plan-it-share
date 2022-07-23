@@ -23,6 +23,14 @@ h2, #labels > span {
      margin: 0 auto;
  }
  
+ #login-mode {
+ 	text-align: center;
+ }
+ 
+ #login-mode span {
+ 	margin-right: 15px;
+ }
+ 
  #login-box > input, h2 {
      margin-bottom: 20px;
  }

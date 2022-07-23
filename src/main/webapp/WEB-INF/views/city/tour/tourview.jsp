@@ -32,6 +32,34 @@
       font-size: 2rem;
    }
    
+    #info-box span {
+		margin-right: 10px;
+	}
+	
+	#info-box i {
+		margin-right: 5px;
+	}
+	
+	#info-box {
+		width: 800px;
+		height: 200px;
+		margin: 0 auto 100px auto;
+	}
+
+	#info-box img {
+		width: 400px;
+		height: 250px;
+		float: left;
+		margin-right: 20px;
+	}
+	
+	#likeform button {
+		outline: none;
+		float: right;
+		background-color: white;
+		border: none;
+	}
+   
 </style>
 <link rel="stylesheet" href="/planitshare/asset/css/rateit.css" />
 </head>
@@ -40,7 +68,36 @@
 	
 	<main>
 		<section>
-			<div class="container">
+		
+		<div id="info-box">
+			<table>
+				<tr>
+					<td><img src="/planitshare/asset/image/${dto.image}"></td>
+					<td>
+						<h5>${dto.placeName}</h5>
+						<p>${dto.category}</p>
+						<p>${dto.address}</p>
+						<p><span>영업시작시간: ${dto.open}</span> <span>영업종료시간: ${dto.close}</span></p>
+						<p>
+					    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likeCnt}</span>
+					    	<i class="fa-solid fa-star reviewCnt"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
+				    	</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<c:if test="${auth.loginmode == 'user'}">
+						<form id="likeform">
+				         	<button type="button" class="btn float-right" onclick="like(${dto.seq});"><i id="like" class="fa-solid fa-heart"></i></button> 
+				         </form>
+						</c:if>							
+					</td>
+				</tr>
+			</table>
+		</div>
+		
+		
+		<%-- 	<div class="container">
 			<div class="col d-flex justify-content-center align-items-center">
 	            <div class="card my-2" style="width: 702px; border-color: white;">
 	                <div class="row no-gutters">
@@ -51,17 +108,17 @@
 	                            <div class="card-text">${dto.category}</div>	                            
 	                            <div class="card-text">${dto.address}</div>
 	                            <div class="card-text">영업시작시간: ${dto.open} 영업종료시간: ${dto.close}</div>
-	                            <div class="card-text"><i class="fa-solid fa-heart"></i>${dto.likeCnt}<i class="fa-solid fa-star"></i><c:if test="${not empty dto.reviewAvg}">${dto.reviewAvg}</c:if>
-	                            											 <c:if test="${empty dto.reviewAvg}">0</c:if>(${dto.reviewCnt})</div>
+	                            <p>
+							    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likeCnt}</span>
+							    	<i class="fa-solid fa-star reviewCnt"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
+						    	</p>
 	                        </div>
 	                    </div>
 	                </div>
 	            </div>
 	        </div>
-	        <form id="likeform">
-	         	<button type="button" class="btn float-right" onclick="like(${dto.seq});"><i id="like" class="fa-solid fa-heart"></i></button> 
-	         </form>
-	       </div>
+	        
+	       </div> --%>
 	       
 	       <!-- 리뷰 등록 -->
 	       <form method="POST" action="/planitshare/city/tourreviewadd.do" enctype="multipart/form-data">
@@ -73,8 +130,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td><textarea class="form-control" name="content" required placeholder="리뷰를 입력해주세요"></textarea></td>
-					<td>
+					<td><textarea class="form-control" name="content" rows="5" required placeholder="리뷰를 입력해주세요"></textarea></td>
+					<td style="vertical-align: middle;">
 						<input type="submit" value="리뷰등록" class="btn btn-secondary">
 					</td>
 				</tr>

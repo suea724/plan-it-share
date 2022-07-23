@@ -18,10 +18,15 @@
       font-size: 1.2rem;
    }
    
-   h2, h3 {
+   h2 {
+      text-align: center;
+      margin-bottom: 50px;
+   }
+   
+   #weatherhead, #planhead {
       text-align: center;
       margin-bottom: 20px;
-      margin-top: 120px;
+      margin-top: 80px;
    }
    
    #search-box {
@@ -56,13 +61,11 @@
    }
    
    #list {
-   
-         width: 1000px;
-         margin: 0 auto;
-         
+       width: 1000px;
+       margin: 0 auto;
    }
    
-   .planlist {
+   .plan {
          float: left;
          margin: 10px;
          text-align: center;
@@ -70,7 +73,7 @@
    }
    
    
-   .planlist > img {
+   .plan > img {
          width: 300px;
          height: 200px;
          background-size: contain;
@@ -78,7 +81,7 @@
          
    }
    
-   .planlist::after {
+   .plan::after {
         content: '';
         display: block;
         clear: both;
@@ -137,14 +140,14 @@
    
    #planhead {
          
-         text-align: center;
+      text-align: center;
       margin-bottom: 20px;
       margin-top: 50px;
-         clear: both;
+      clear: both;
    }
    
    #icon {
-         padding-right: 40px;
+        padding-right: 40px;
    
    }
    
@@ -152,7 +155,20 @@
    #header-menu li:nth-child(2) a {
 		color: #6DA2DF;
 	}
+	
+	.plan i {
+		margin-right: 5px;
+	}
    
+	.plan .cnt {
+		margin-left: 5px;
+		color: gray;
+	}
+	
+	.plan img:hover {
+		transform: scale(1.2);
+		transition: transform 0.8s;
+	}
    
 </style>
 </head>
@@ -176,7 +192,7 @@
          </div>
          </form>
          
-         <h2>오늘의 ${dto.name} 날씨</h2>
+         <h2 id="weatherhead">오늘의 ${dto.name} 날씨</h2>
          <div class="weather">
            <div class="iconinfo">
            <div class="City"></div>
@@ -193,19 +209,18 @@
             
          </div>
          
-         <h2 id="planhead">인기 ${dto.name} 여행 일정</h2>
+         <h2 id="planhead">인기 ${dto.name} 여행 일정 TOP 6</h2>
          <div id="list">
           <c:forEach items="${list}" var="dto">
-            <div class="planlist" onclick="location.href='/planitshare/plan/view.do?seq=${dto.seq}';">
+            <div class="plan" onclick="location.href='/planitshare/plan/view.do?seq=${dto.seq}';">
                <img src="/planitshare/asset/image/${dto.image}">
                <div class="text">
-                   <div>${dto.title}</div>
-                   <span><i class="fa-solid fa-user"></i>${dto.author}</span>
-                   <span><i class="fa-solid fa-eye"></i>${dto.readCount}</span>
-                   <span><i class="fa-solid fa-heart"></i>${dto.likecnt}</span>
-                   <c:if test="${dto.reviewcnt > 0}">
-                   <span>(${dto.reviewcnt})</span>
-                   </c:if>
+                   <div>
+                   	${dto.title}<c:if test="${dto.commentcnt > 0}"><span class="cnt">(${dto.commentcnt})</span></c:if>
+                   </div>
+                   <i class="fa-solid fa-user"></i><span>${dto.author}</span>
+                   <i class="fa-solid fa-eye"></i><span>${dto.readCount}</span>
+                   <i class="fa-solid fa-heart"></i><span>${dto.likecnt}</span>
                </div>
             </div>
             </c:forEach>

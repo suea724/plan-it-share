@@ -244,8 +244,8 @@
 			                <span><i class="fa-solid fa-user"></i>${pdto.author}</span>
 			                <span><i class="fa-solid fa-eye"></i>${pdto.readCount}</span>
 			                <span><i class="fa-solid fa-heart"></i>${pdto.likecnt}</span>
-			                <c:if test="${pdto.reviewcnt > 0}">
-			                <span>(${pdto.reviewcnt})</span>
+			                <c:if test="${pdto.commentcnt > 0}">
+			                <span>(${pdto.commentcnt})</span>
 			                </c:if>
 			            </div>
 					</div>

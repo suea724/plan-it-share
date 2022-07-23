@@ -18,13 +18,14 @@
 		font-size: 1.2rem;
 	}
 	
-	#header-menu li:nth-child(2) a {
-		color : #6DA2DF;
-	}
-	
-	h2, h1 {
+	h2 {
 		text-align: center;
 		margin-bottom: 50px;
+	}
+	
+	h4 {
+		text-align: center;
+		margin-top: 100px;
 	}
 	
 	#search-box {
@@ -49,32 +50,57 @@
 		width: 80px;
 	}
 	
-	.img-fluid {
-		width: 300px;
-		height: 200px;
+	.card {
+		width: 700px;
+		margin: 30px auto;
 	}
 	
-	.fa-heart {
+	.food-img {
+		float: left;
+		width: 300px;
+		height: 200px;
+		margin-right: 20px;
+	}
+
+	.card-title, .card-text {
+		margin : 5px 0;
+	}
+	
+	.card-text span {
+		margin-right: 10px;
+	}
+	
+	.card-text i {
+		margin-right: 5px;
+	}
+	
+	i.fa-solid.fa-heart {
 		color: tomato;
 	}
 	
-	.fa-star {
+	i.fa-solid.fa-star {
 		color: gold;
 	}
 	
 	.pagination {
-	    justify-content: center;
-	}
-
-	.card {
-	    padding: 5px;
-	    display: inline-block;
-	    margin-left: 20px;
-	    margin-bottom: 25px;
+		margin-top: 50px;
+		justify-content: center;
 	}
 	
-	.card-title {
-		margin-top: 40px;
+	.card {
+		cursor: pointer;
+	}
+	
+	#food-info {
+		margin-top: 30px;
+	}
+	
+	h1 {
+		text-align: center;
+	}
+	
+	#header-menu li:nth-child(2) a {
+		color: #6DA2DF
 	}
 	
 </style>
@@ -98,32 +124,26 @@
 			<input type="hidden" name="cseq" value="${cseq}">
 			</form>
 			
-		<div class="container h-100">
-		<h1>인기 관광명소</h1>
-		<c:forEach items="${list}" var="dto">
-		<a href="/planitshare/city/tourview.do?seq=${dto.seq}&cseq=${dto.cseq}">
-		<div class="col d-flex justify-content-center align-items-center">
-            <div class="card my-2" style="width: 702px;">
-                <div class="row no-gutters">
-                    <span><img src="/planitshare/asset/image/${dto.image}" class="img-fluid" alt="숙소이미지"></span>
-                    <div class="col">
-                        <div class="card-block px-4">
-                            <h4 class="card-title">${dto.placeName}</h4>
-                            <div class="card-text">${dto.category}</div>
-                            <div class="card-text"><i class="fa-solid fa-heart"></i>${dto.likeCnt}<i class="fa-solid fa-star"></i><c:if test="${not empty dto.reviewAvg}">${dto.reviewAvg}</c:if>
-                            											 <c:if test="${empty dto.reviewAvg}">0</c:if>(${dto.reviewCnt})</div>
-                            <div class="card-text">${dto.address}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </a>
-		</c:forEach>
+		<c:forEach var="dto" items="${list}">
+			<div class="card" onclick="location.href='/planitshare/city/tour/view.do?cseq=${dto.cseq}&seq=${dto.seq}'">
+			  <div class="card-body">
+			  	<img src="/planitshare/asset/image/${dto.image}" class="food-img">
+			  	<div id="food-info">
+				    <h5 class="card-title">${dto.placeName}</h5>
+				    <p class="card-text">${dto.category}</p>
+				    <p class="card-text">
+				    	<i class="fa-solid fa-heart"></i><span>${dto.likeCnt}</span>
+				    	<i class="fa-solid fa-star"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
+			    	</p>
+				    <p class="card-text">${dto.address}</p>
+			    </div>
+			  </div>
+			</div>
+			</c:forEach>
+		
 		<div style="text-align: center">
 			${pagebar}
 		</div>
-        </div>
 		</section>
 	</main>
 	

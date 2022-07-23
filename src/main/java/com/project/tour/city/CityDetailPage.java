@@ -24,17 +24,18 @@ public class CityDetailPage extends HttpServlet {
 		String seq = req.getParameter("cseq");
 		
 		CityDAO dao = new CityDAO();
-		
-		System.out.println(seq);
-		
 		CityDTO dto = dao.findCity(seq); 
 		
 		ArrayList<PlanDTO> list = dao.getLikePlan(seq);
 		
+		for (PlanDTO pdto : list) {
+			if (pdto.getTitle().length() >= 20) {
+				pdto.setTitle(pdto.getTitle().substring(0, 20) + "...");
+			}
+		}
 		
 		req.setAttribute("dto", dto);
 		req.setAttribute("list", list);
-		
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/city/citydetail.jsp");
 

@@ -21,17 +21,14 @@ public class PlanDTO {
 	private String name;
 	private String image;
 	private String likecnt;
-	private String reviewcnt;
+	private String commentcnt;
 
 	private String city;
-
 	private String readcount;
-
 	private String authorProfile;
-
 	private String likeCnt;
-	
 	private String banned;
+	private String mainAddress;
 
 	public String getBanned() {
 		return banned;
@@ -161,14 +158,6 @@ public class PlanDTO {
 		this.likecnt = likecnt;
 	}
 
-	public String getReviewcnt() {
-		return reviewcnt;
-	}
-
-	public void setReviewcnt(String reviewcnt) {
-		this.reviewcnt = reviewcnt;
-	}
-
 	public String getCity() {
 		return city;
 	}
@@ -201,14 +190,21 @@ public class PlanDTO {
 		this.likeCnt = likeCnt;
 	}
 
-	
+	public String getMainAddress() {
+		return mainAddress;
+	}
 
-	
-	
-	
-	
-	
-	
-	
+	public void setMainAddress(String mainAddress) {
+		this.mainAddress = mainAddress;
+	}
+
+	public String getCommentcnt() {
+		return commentcnt;
+	}
+
+	public void setCommentcnt(String commentcnt) {
+		this.commentcnt = commentcnt;
+	}
+
 	
 }

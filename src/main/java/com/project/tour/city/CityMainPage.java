@@ -22,67 +22,39 @@ public class CityMainPage extends HttpServlet {
 
 		req.setCharacterEncoding("UTF-8");
 		
-		String cseq = req.getParameter("cseq");
-		String search = req.getParameter("search");
+		String keyword = req.getParameter("keyword");
 		
 		CityDAO dao = new CityDAO();
 		
-		ArrayList<CityDTO> list = dao.findMainCity();
+		ArrayList<CityDTO> clist = dao.getAllCity();
 		ArrayList<CityDTO> rlist = dao.findRecommendCity();
 		ArrayList<DistrinctDTO> dlist = dao.findSubCity();
 		
-		req.setAttribute("list", list);
+		req.setAttribute("clist", clist);
 		req.setAttribute("rlist", rlist);
 		req.setAttribute("dlist", dlist);
 		
-		if (cseq == null) { // 여행지 메인 페이지일 경우
-			
-			
+		if (keyword == null) { // 여행지 메인 페이지일 경우
 			RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/city/city.jsp");
 			dispatcher.forward(req, resp);
 			
-		} else { // 여행지 상세 페이지
+		} else { // 검색어가 입력될 경우
 			
-			resp.sendRedirect("/planitshare/citydetail.do?cseq=" + cseq);
-
+			String searchCseq = dao.getCitySeq(keyword);
+			
+			if (searchCseq == null) { // 검색 결과가 없으면
+				req.setAttribute("searchError", "y");
+				
+				RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/city/city.jsp");
+				dispatcher.forward(req, resp);
+				
+			} else { // 검색 결과가 있으면
+				resp.sendRedirect("/planitshare/citydetail.do?cseq=" + searchCseq); // 상세 페이지로 이동
+			}
 		}
 
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-				req.setCharacterEncoding("UTF-8");
-				
-				//2.
-				String city = req.getParameter("city");
-				
-				CityDAO dao = new CityDAO(); 
-				
-				String cseq = dao.getCitySeq(city);
-				
-				if(cseq != null) { // 도시명 검색 성공
-					
-					resp.sendRedirect("/planitshare/city.do?cseq=" + cseq);
-		  
-					
-				}
-				else { 
-	
-					ArrayList<CityDTO> list = dao.findMainCity();
-					ArrayList<CityDTO> rlist = dao.findRecommendCity();
-					ArrayList<DistrinctDTO> dlist = dao.findSubCity();
-					
-					req.setAttribute("list", list);
-					req.setAttribute("rlist", rlist);
-					req.setAttribute("dlist", dlist);
-					
-					req.setAttribute("searchError", "y");
-	                RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/city/city.jsp");
-	                dispatcher.forward(req, resp);
-		           
-		        }
-
-	}
 
 }
 

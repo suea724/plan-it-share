@@ -8,7 +8,7 @@
 <title>Plan It Share</title>
 <%@ include file="/WEB-INF/views/inc/asset.jsp"%>
 <style>
-	#header-menu li:nth-child(3) > a{
+	#header-menu li:nth-child(3) > a {
 		color: #6DA2DF;
 	}
 
@@ -22,13 +22,8 @@
       font-size: 1.2rem;
    }
    
-   h2 {
-      text-align: center;
-      margin-bottom: 50px;
-   }
-   
    #search-box {
-      margin: 50px 0;
+      margin: 0 0 50px 0;
       text-align: center;
    }
    
@@ -59,41 +54,57 @@
    }
    
    #list {
-   
    		width: 1000px;
-   		margin: 0 auto;
-   		
+   		margin: 0 auto 50px 0;
+   		display: flex;
+   		flex-wrap: wrap;
    }
    
-   .planlist {
-   		float: left;
-   		margin: 10px;
+   .plan {
+   		margin: 10px 20px 10px 10px;
    		text-align: center;
    		cursor: pointer;
    }
    
    
-   .planlist > img {
+   .plan > img {
    		width: 300px;
    		height: 200px;
    		background-size: contain;
-   			
-   		
    }
    
-	.planlist::after {
+	.plan::after {
         content: '';
         display: block;
         clear: both;
     }
    
-   .btn-primary {
-   		margin-top: 30px;
+   #add-plan-btn {
    		float: right;
-   		margin-right: 50px;
+   		margin-right: 10px;
    }
    
-
+	.plan .text i {
+		margin-right: 5px;
+	}
+	
+	#btn-box {
+		height: 50px;
+		width: 1000px;
+	}
+	
+	.pagination {
+   		justify-content: center;
+   }
+   
+   #no-result {
+   		text-align: center;
+   		margin-bottom: 100px;
+   }
+   
+   #search-box td {
+   		padding-right: 10px;
+   }
    
 </style>
 </head>
@@ -103,11 +114,13 @@
 		<section>
 			
 			<div id="search-box">
-				<form method="GET" action="/planitshare/plan/plansearch.do">
+				<form method="GET" action="/planitshare/plan.do">
 					<table class="search">
 						<tr>
 							<td>
-								<select name="column" class="form-control" style="width: 130px;">
+								<select name="column" id="column" class="form-control" style="width: 130px;">
+									<option value="name">지역</option>
+									<option value="title">제목</option>
 									<option value="content">내용</option>
 									<option value="author">작성자</option>
 								</select>
@@ -124,32 +137,50 @@
 					</table>
 				</form>
 			</div>
+			
+		<div id="btn-box">
+			<c:if test="${not empty auth}">
+         	<input type="button" class="btn btn-primary" id="add-plan-btn" value="일정 등록" onclick="location.href='/planitshare/plan/add.do';">
+         	</c:if>
+		</div>
+		
 
 		<div id="list">
 			 <c:forEach items="${list}" var="dto">
-	         <div class="planlist" onclick="location.href='/planitshare/plan/view.do?seq=${dto.seq}';">
+	         <div class="plan" onclick="location.href='/planitshare/plan/view.do?seq=${dto.seq}';">
 	            <img src="/planitshare/asset/image/${dto.image}">
 	            <div class="text">
 	                <div>${dto.title}</div>
-	                <span><i class="fa-solid fa-user"></i>${dto.author}</span>
-	                <span><i class="fa-solid fa-eye"></i>${dto.readCount}</span>
-	                <span><i class="fa-solid fa-heart"></i>${dto.likecnt}</span>
-	                <c:if test="${dto.reviewcnt > 0}">
-	                <span>(${dto.reviewcnt})</span>
+	                <i class="fa-solid fa-user"></i><span>${dto.author}</span>
+	                <i class="fa-solid fa-eye"></i><span>${dto.readCount}</span>
+	                <i class="fa-solid fa-heart"></i><span>${dto.likecnt}</span>
+	                <c:if test="${dto.commentcnt > 0}">
+	                <span>(${dto.commentcnt})</span>
 	                </c:if>
 	            </div>
 	         </div>
 	         </c:forEach>
-	         <c:if test="${not empty auth}">
-	         <input type="button" class="btn btn-primary" value="일정등록하기" onclick="location.href='/planitshare/plan/add.do';">
-	         </c:if>    	      	         
+         </div>
+         
+          <c:if test="${list.size() == 0}">
+			<h4 id="no-result">검색 결과가 없습니다.</h4>
+		</c:if>
+		
+		<div id="page">	
+        	${pagebar}
         </div>
-			
-
-
-
+	         
 		</section>
 	</main>
+	
+	<script>
+		<c:if test="${map.isSearch == 'y'}">
+		$('select[name=column]').val('${map.column}');
+		$('input[name=word]').val('${map.word}');
+		</c:if>
+		
+		$
+	</script>
 
 </body>
 </html>

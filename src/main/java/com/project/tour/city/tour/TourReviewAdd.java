@@ -1,6 +1,7 @@
 package com.project.tour.city.tour;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,16 +19,32 @@ import com.project.tour.dto.UserDTO;
 public class TourReviewAdd extends HttpServlet {
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-	}
-
-	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		HttpSession session = req.getSession();
 				
 		req.setCharacterEncoding("UTF-8");
+
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html; charset=UTF-8");
+		
+		PrintWriter writer = resp.getWriter();
+		
+		if (session.getAttribute("auth") == null) {
+			
+			writer.println("<html>");
+			writer.println("<body>");
+			writer.println("<script>");
+			writer.println("alert('로그인 후 리뷰를 작성해주세요.');");
+			writer.println("location.href = '/planitshare/login.do';");
+			writer.println("</script>");
+			writer.println("<body>");
+			writer.println("</html>");
+			writer.close();
+			
+			return;
+			
+		}
 		
 		// 리뷰 이미지 업로드
 		String path = req.getRealPath("/userimage/tour");
@@ -83,9 +100,9 @@ public class TourReviewAdd extends HttpServlet {
 		String cseq = multi.getParameter("cseq");
 		
 		if (result == 1) {
-			resp.sendRedirect(String.format("/planitshare/city/tourview.do?seq=%s&cseq=%s", seq, cseq));
+			resp.sendRedirect(String.format("/planitshare/city/tour/view.do?seq=%s&cseq=%s", seq, cseq));
 		} else {
-			resp.sendRedirect(String.format("/planitshare/city/tourview.do?seq=%s&cseq=%s", seq, cseq));
+			resp.sendRedirect(String.format("/planitshare/city/tour/view.do?seq=%s&cseq=%s", seq, cseq));
 		}
 		
 	}

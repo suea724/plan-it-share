@@ -7,7 +7,11 @@
 <meta charset="UTF-8">
 <title>Plan It Share</title>
 <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <style>
+
 	
 	#city-submenu {
 		box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -22,7 +26,6 @@
 	h2 {
 		text-align: center;
 		margin-bottom: 50px;
-		margin-top: 50px;
 	}
 	
 	section form #search-box {
@@ -41,7 +44,7 @@
 		width: 100px;
 	}
 	
-	#search-box input[type=text] {
+	#search-box #search {
 		width: 300px;
 	}
 	
@@ -116,7 +119,7 @@
     }
     
     .sub {
-    	width: 300px;
+    	width: 350px;
     	display: inline-block;
     	padding-right: 100px;
     	height: 240px;
@@ -134,14 +137,16 @@
     
     }
     
-    .cityr:::after {
+    .cityr::after {
         content: '';
         display: block;
         clear: both;
     }
     
-    #cityn{
+    .cityn{
     	font-size: 1.5em;
+    	font-weight: bold;
+    	margin-bottom: 20px;
     }
     
     #main-city {
@@ -163,12 +168,22 @@
     
     .city-list {
     	padding-left: 0;
+    	display: flex;
+    	flex-wrap: wrap;
     }
+    
+    .city-list li {
+    	margin-right: 30px;
+    }
+    
     
 	 #header-menu li:nth-child(2) a {
 		color: #6DA2DF;
 	}
     
+    #ui-id-1 li {
+    	display: block;
+    }
 </style>
 </head>
 <body>
@@ -184,20 +199,22 @@
                 </div>
            	</c:if>
 
-			<form method= "POST" action="/planitshare/city.do">
+			<form method= "GET" action="/planitshare/city.do">
 			<div id="search-box">
-				<input type="text" name="city" id="" class="form-control" placeholder="도시명을 입력해주세요."/>
-				<button class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
+				<div class="ui-widget">
+				<input id="search" name="keyword" class="form-control" placeholder="도시명을 입력해주세요." />
+			  	</div>
+			  	<button class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
-			
 			</form>
+			
 			
 			<h2>인기 여행지</h2>
 				<table class="table control">
 					<c:forEach items="${rlist}" var="rdto">
 						<tr class="list">
 							<td class="imgtd">
-								<a href="/planitshare/city.do?cseq=${rdto.cseq}">
+								<a href="/planitshare/citydetail.do?cseq=${rdto.cseq}">
 								<img src="/planitshare/asset/image/${rdto.image}" id="img1">
 								</a>
 								<span>${rdto.name}</span>
@@ -205,19 +222,11 @@
 						</tr>
 					</c:forEach>
 				</table>
-			
-			
-				<ul class="control" id="main-city">
-					<c:forEach var="dto" items="${list}">
-						<li><a href="/planitshare/city.do?cseq=${dto.seq}">${dto.name}</a></li>
-					</c:forEach>
-				</ul>
-			
 
 				<div id="subbox" class="control">
 					<c:forEach items="${dlist}" var="dto">	
 						<div class="sub">
-								<div id="cityn">
+								<div class="cityn">
 								${dto.distrinct}
 								</div>
 								<ul class="city-list">
@@ -233,6 +242,21 @@
 			
 		</section>
 	</main>
+	
+	<script type="text/javascript">
+	
+	let cities = [];
+	
+	<c:forEach var="city" items="${clist}">
+	cities.push('${city.name}');
+	</c:forEach>
+	
+	  $( function() {
+	    $( "#search" ).autocomplete({
+	      source: cities
+	    });
+	  } );
+	</script>
 
 </body>
 </html>

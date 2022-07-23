@@ -41,18 +41,21 @@ public class PlanDAO {
 	 * @author 백서영
 	 * @return ArrayList<PlanDTO>
 	 */
-	public ArrayList<PlanDTO> getlist() {
+	public ArrayList<PlanDTO> getlist(HashMap<String, String> map) {
 		try {
-			String sql = "select * from vwSPlan where rownum <= 9";
+			String sql = "select * from (select rownum as rnum, a.* from (select p.*, c.name, c.image, (select count(*) from tblLikePlan lp where lp.pseq = p.seq) as likecnt, (select count(*) from tblComment c where c.pseq = p.seq) as commentcnt from tblPlan p inner join tblCity c on p.cseq = c.seq order by p.seq desc) a) where rnum between ? and ?";
 			
-			stat = conn.createStatement();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, map.get("begin"));
+			pstat.setString(2, map.get("end"));
 			
-			rs = stat.executeQuery(sql);
+			rs = pstat.executeQuery();
 			
 			ArrayList<PlanDTO> list = new ArrayList<PlanDTO>();
 			
 			while (rs.next()) {
 				PlanDTO dto = new PlanDTO();
+				
 				dto.setSeq(rs.getString("seq"));
 				dto.setCseq(rs.getString("cseq"));
 				dto.setRegdate(rs.getString("regdate"));
@@ -65,7 +68,7 @@ public class PlanDAO {
 				dto.setName(rs.getString("name"));
 				dto.setImage(rs.getString("image"));
 				dto.setLikecnt(rs.getString("likecnt"));
-				dto.setReviewcnt(rs.getString("reviewcnt"));
+				dto.setCommentcnt(rs.getString("commentcnt"));
 				
 				list.add(dto);
 						
@@ -93,31 +96,19 @@ public class PlanDAO {
 			
 			String where = "";
 						
-				if (map.get("isSearch").equals("y")) {
-					where = " where " + map.get("column")  + " like " + "\'%" + map.get("word") + "%\'";
+			if (map.get("isSearch").equals("y")) {
+				where = "where " + map.get("column")  + " like " + "\'%" + map.get("word") + "%\'";
 
-				}
-			
+			}
+		
+			String sql = "select * from (select rownum as rnum, a.*  from (select p.*, c.name, c.image, (select count(*) from tblLikePlan lp where lp.pseq = p.seq) as likecnt, (select count(*) from tblComment c where c.pseq = p.seq) as commentcnt  from tblPlan p inner join tblCity c on p.cseq = c.seq " + where + " order by p.seq desc) a) where rnum between ? and ?";
 				
-			String sql = "select \r\n"
-					+ "    p.seq,\r\n"
-					+ "    p.cseq,\r\n"
-					+ "    p.regdate,\r\n"
-					+ "    p.readcount,\r\n"
-					+ "    p.startdate,\r\n"
-					+ "    p.enddate,\r\n"
-					+ "    p.title,\r\n"
-					+ "    p.content,\r\n"
-					+ "    p.author,\r\n"
-					+ "    c.name,\r\n"
-					+ "    c.image,\r\n"
-					+ "    (select count(*) from tblLikePlan lp where lp.pseq = p.seq) as likecnt,\r\n"
-					+ "	   (select count(*) from tblComment c where c.pseq = p.seq) as reviewcnt\r\n"
-					+ "from tblPlan p inner join tblCity c on p.cseq = c.seq " + where +" order by seq desc ";
 			
-			stat = conn.createStatement();
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, map.get("begin"));
+			pstat.setString(2, map.get("end"));
 			
-			rs = stat.executeQuery(sql);
+			rs = pstat.executeQuery();
 			
 			ArrayList<PlanDTO> list = new ArrayList<PlanDTO>();
 			
@@ -135,7 +126,7 @@ public class PlanDAO {
 				dto.setName(rs.getString("name"));
 				dto.setImage(rs.getString("image"));
 				dto.setLikecnt(rs.getString("likecnt"));
-				dto.setReviewcnt(rs.getString("reviewcnt"));
+				dto.setCommentcnt(rs.getString("commentcnt"));
 				
 				list.add(dto);
 			}
@@ -160,7 +151,7 @@ public class PlanDAO {
 
 			}
 			
-			String sql = "select count(*) as cnt from tblPlan" + where;
+			String sql = "select count(*) as cnt from tblPlan p inner join tblcity c on p.cseq = c.seq " + where;
 		
 			
 			stat = conn.createStatement();
@@ -188,7 +179,7 @@ public class PlanDAO {
 		public PlanDTO getPlan(String seq) {
 			try {
 				
-				String sql = "select p.*, (select count(*) from tblLikePlan lp where p.seq = lp.pseq) as likecnt, (select profile from tblUser u where u.id = p.author) as author_profile, c.name from tblPlan p inner join tblCity c on p.cseq = c.seq where p.seq = ?";
+				String sql = "select p.*, c.mainaddress, (select count(*) from tblLikePlan lp where p.seq = lp.pseq) as likecnt, (select profile from tblUser u where u.id = p.author) as author_profile, c.name from tblPlan p inner join tblCity c on p.cseq = c.seq where p.seq = ?";
 				pstat = conn.prepareStatement(sql);
 				pstat.setString(1, seq);
 				rs = pstat.executeQuery();
@@ -209,6 +200,7 @@ public class PlanDAO {
 					dto.setLikeCnt(rs.getString("likecnt"));
 					dto.setAuthorProfile(rs.getString("author_profile"));
 					dto.setCity(rs.getString("name"));
+					dto.setMainAddress(rs.getString("mainaddress"));
 				}
 				
 				return dto;

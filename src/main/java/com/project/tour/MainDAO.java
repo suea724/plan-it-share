@@ -80,7 +80,7 @@ public class MainDAO {
 	public ArrayList<PlanDTO> getPlanList() {
 		
 		try {
-			String sql = "select * from vwSPlan where rownum <= 9";
+			String sql = "select * from (select rownum as rnum, a.*  from (select p.*, c.name, c.image, (select count(*) from tblLikePlan lp where lp.pseq = p.seq) as likecnt, (select count(*) from tblComment c where c.pseq = p.seq) as commentcnt  from tblPlan p inner join tblCity c on p.cseq = c.seq order by likecnt desc) a) where rnum <= 9";
 			
 			stat = conn.createStatement();
 			
@@ -102,7 +102,7 @@ public class MainDAO {
 				dto.setName(rs.getString("name"));
 				dto.setImage(rs.getString("image"));
 				dto.setLikecnt(rs.getString("likecnt"));
-				dto.setReviewcnt(rs.getString("reviewcnt"));
+				dto.setCommentcnt(rs.getString("commentcnt"));
 				
 				plist.add(dto);
 						

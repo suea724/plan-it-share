@@ -194,22 +194,7 @@ public class CityDAO {
 	public ArrayList<PlanDTO> getLikePlan(String seq) {
 		
 		try {
-			String sql = "select \r\n"
-					+ "    p.seq,\r\n"
-					+ "    p.cseq,\r\n"
-					+ "    p.regdate,\r\n"
-					+ "    p.readcount,\r\n"
-					+ "    p.startdate,\r\n"
-					+ "    p.enddate,\r\n"
-					+ "    p.title,\r\n"
-					+ "    p.content,\r\n"
-					+ "    p.author,\r\n"
-					+ "    c.name,\r\n"
-					+ "    c.image,\r\n"
-					+ "    (select count(*) from tblLikePlan lp where lp.pseq = p.seq) as likecnt,\r\n"
-					+ "    (select count(*) from tblComment c where c.pseq = p.seq) as reviewcnt\r\n"
-					+ "from tblPlan p inner join tblCity c on p.cseq = c.seq \r\n"
-					+ "where c.seq = ? order by likecnt desc";
+			String sql = "select * from (select rownum as rnum, a.*  from (select p.*, c.name, c.image, (select count(*) from tblLikePlan lp where lp.pseq = p.seq) as likecnt, (select count(*) from tblComment c where c.pseq = p.seq) as commentcnt  from tblPlan p inner join tblCity c on p.cseq = c.seq where cseq = ? order by likecnt desc) a) where rnum <= 6";
 			
 			
 			
@@ -237,7 +222,7 @@ public class CityDAO {
 				dto.setName(rs.getString("name"));
 				dto.setImage(rs.getString("image"));
 				dto.setLikecnt(rs.getString("likecnt"));
-				dto.setReviewcnt(rs.getString("reviewcnt"));
+				dto.setCommentcnt(rs.getString("commentcnt"));
 				
 				list.add(dto);
 				
@@ -252,6 +237,60 @@ public class CityDAO {
 		}
 		
 		return null;
+	}
+
+	public ArrayList<CityDTO> getAllCity() {
+		
+		try {
+			String sql = "select * from tblCity";
+			stat = conn.createStatement();
+			rs = stat.executeQuery(sql);
+			
+			ArrayList<CityDTO> list = new ArrayList<>();
+			
+			while (rs.next()) {
+				CityDTO dto = new CityDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				
+				list.add(dto);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			System.out.println("CityDAO.getAllCity");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+
+	public CityDTO getCity(String cseq) {
+		
+		try {
+			String sql = "select * from tblCity where seq = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery(sql);
+			
+			CityDTO dto = new CityDTO();
+			
+			if (rs.next()) {
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				
+				return dto;
+			}
+			
+		} catch (Exception e) {
+			System.out.println("CityDAO.getAllCity");
+			e.printStackTrace();
+		}
+		
+		return null;
+		
 	}
 
 }

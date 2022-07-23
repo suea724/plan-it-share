@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.project.tour.DBUtil;
+import com.project.tour.dto.FoodDTO;
+import com.project.tour.dto.FoodReviewDTO;
 import com.project.tour.dto.LodgingDTO;
 import com.project.tour.dto.LodgingLikeDTO;
 import com.project.tour.dto.LodgingReviewDTO;
@@ -105,7 +107,8 @@ public class LodgingDAO {
 				dto.setCheckout(rs.getString("checkout"));
 				dto.setCategory(rs.getString("category"));
 				dto.setLikecnt(rs.getString("likecnt"));
-				dto.setReviewavg(rs.getString("reviewavg"));
+				dto.setReviewavg(String.format("%.1f" ,rs.getDouble("reviewavg")));
+				dto.setReviewcnt(rs.getString("reviewcnt"));
 
 				return dto;
 			}
@@ -243,7 +246,9 @@ public class LodgingDAO {
 	 * @return int
 	 */
 	public int addComment(LodgingReviewDTO dto) {
+		
 		try {
+			
 			String sql = "insert into tblLodgingReview(seq, content, star, regdate, id, lseq, image) values(seqLodgingReview.nextVal, ?, ?, sysdate, ?, ?, ?)";
 			
 			pstat = conn.prepareStatement(sql);
@@ -597,6 +602,272 @@ public class LodgingDAO {
 		return 0;
 		
 	}
+
+
+	/**
+	 * 특정 음식점에 대한 모든 리뷰를 가져오는 메서드
+	 * 
+	 * @author 안수아
+	 * @param seq
+	 * @return ArrayList<FoodReviewDTO>
+	 */
+	public ArrayList<FoodReviewDTO> findReviews(String seq) {
+		
+		try {
+			String sql = "select * from tblFoodReview where fseq = ? order by seq desc";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, seq);
+			rs = pstat.executeQuery();
+			
+			ArrayList<FoodReviewDTO> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				FoodReviewDTO dto = new FoodReviewDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setStar(rs.getString("star"));
+				dto.setRegdate(rs.getString("regdate"));
+				dto.setImage(rs.getString("image"));
+				dto.setId(rs.getString("id"));
+				dto.setFseq(rs.getString("fseq"));
+				dto.setContent(rs.getString("content"));
+				
+				list.add(dto);
+			}
+			return list;
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.findReviews");
+			e.printStackTrace();
+
+		} 
+		return null;
+	}
+	
+	
+	public ArrayList<LodgingDTO> listLodging(String cseq, int page) {
+		int begin = (page - 1) * 10 + 1; 
+		int end = page * 10;
+		
+		try {
+			String sql = "select * from (select rownum as rnum,a.* from\r\n"
+					+ "(select\r\n"
+					+ "l.seq, l.name, l.address, l.checkin, l.checkout, l.image, l.cseq, lc.category, (select count(*) from tblLikeLodging ll where ll.lseq = l.seq) as likecnt, (select count(*) from tblLodgingReview lr where lr.lseq = l.seq) as reviewcnt, (select avg(star) from tblLodgingReview lr where lr.lseq = l.seq) as reviewavg\r\n"
+					+ "from tblLodging l inner join tblCity c on l.cseq = c.seq\r\n"
+					+ "        inner join tblLodgingCategory lc on l.lcseq = lc.seq where c.seq = ? order by likecnt desc) a) where rnum between ? and ?";
+			
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			pstat.setInt(2, begin);
+			pstat.setInt(3, end);
+			
+			rs = pstat.executeQuery();
+			
+			ArrayList<LodgingDTO> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				
+				LodgingDTO dto = new LodgingDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setAddress(rs.getString("address"));
+				dto.setImage(rs.getString("image"));
+				dto.setCategory(rs.getString("category"));
+				dto.setCseq(rs.getString("cseq"));
+				dto.setLikecnt(rs.getString("likecnt"));
+				dto.setReviewcnt(rs.getString("reviewcnt"));
+				dto.setReviewavg(String.format("%.1f" ,rs.getDouble("reviewavg")));
+				
+				
+				list.add(dto);
+			}
+			return list;
+			
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.listFood");
+			e.printStackTrace();
+
+		} 
+		
+		return null;
+	}
+
+	public int getTotalCount(String cseq) {
+		try {
+			String sql = "select count(*) as cnt from tblLodging where cseq = ?";
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery();
+			
+			if (rs.next()) {
+				return Integer.parseInt(rs.getString("cnt"));	
+			}
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.getTotalCount");
+			e.printStackTrace();
+
+		} 
+		
+		return 0;
+	}
+
+	
+	public ArrayList<LodgingDTO> searchByName(String cseq, String keyword, int page) {
+		
+		try {
+			
+			int begin = (page - 1) * 10 + 1; 
+			int end = page * 10;
+
+			String sql = String.format("select * from (select rownum as rnum,a.* from\r\n"
+					+ "(select\r\n"
+					+ "l.seq, l.name, l.address, l.checkin, l.checkout, l.image, l.cseq, lc.category, (select count(*) from tblLikeLodging ll where ll.lseq = l.seq) as likecnt, (select count(*) from tblLodgingReview lr where lr.lseq = l.seq) as reviewcnt, (select avg(star) from tblLodgingReview lr where lr.lseq = l.seq) as reviewavg\r\n"
+					+ "from tblLodging l inner join tblCity c on l.cseq = c.seq\r\n"
+					+ "        inner join tblLodgingCategory lc on l.lcseq = lc.seq where c.seq = ? and l.name like '%%%s%%' order by likecnt desc) a) where rnum between ? and ?", keyword);
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, cseq);
+			pstat.setInt(2, begin);
+			pstat.setInt(3, end);
+			
+			rs = pstat.executeQuery();
+			
+			ArrayList<LodgingDTO> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				LodgingDTO dto = new LodgingDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setAddress(rs.getString("address"));
+				dto.setImage(rs.getString("image"));
+				dto.setCategory(rs.getString("category"));
+				dto.setCseq(rs.getString("cseq"));
+				dto.setLikecnt(rs.getString("likecnt"));
+				dto.setReviewcnt(rs.getString("reviewcnt"));
+				dto.setReviewavg(String.format("%.1f" ,rs.getDouble("reviewavg")));
+				
+				
+				list.add(dto);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.searchByName");
+			e.printStackTrace();
+
+		} 
+		
+		return null;
+	}
+	
+	public ArrayList<LodgingDTO> searchByCategory(String cseq, String keyword, int page) {
+		
+			try {
+			
+			int begin = (page - 1) * 10 + 1; 
+			int end = page * 10;
+			
+			String sql = String.format("select * from (select rownum as rnum,a.* from\r\n"
+					+ "(select\r\n"
+					+ "l.seq, l.name, l.address, l.checkin, l.checkout, l.image, l.cseq, lc.category, (select count(*) from tblLikeLodging ll where ll.lseq = l.seq) as likecnt, (select count(*) from tblLodgingReview lr where lr.lseq = l.seq) as reviewcnt, (select avg(star) from tblLodgingReview lr where lr.lseq = l.seq) as reviewavg\r\n"
+					+ "from tblLodging l inner join tblCity c on l.cseq = c.seq\r\n"
+					+ "        inner join tblLodgingCategory lc on l.lcseq = lc.seq where c.seq = ? and lc.category like '%%%s%%' order by likecnt desc) a) where rnum between ? and ?", keyword);
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, cseq);
+			pstat.setInt(2, begin);
+			pstat.setInt(3, end);
+			
+			rs = pstat.executeQuery();
+			
+			ArrayList<LodgingDTO> list = new ArrayList<>();
+			
+			while(rs.next()) {
+				LodgingDTO dto = new LodgingDTO();
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setName(rs.getString("name"));
+				dto.setAddress(rs.getString("address"));
+				dto.setImage(rs.getString("image"));
+				dto.setCategory(rs.getString("category"));
+				dto.setCseq(rs.getString("cseq"));
+				dto.setLikecnt(rs.getString("likecnt"));
+				dto.setReviewcnt(rs.getString("reviewcnt"));
+				dto.setReviewavg(String.format("%.1f" ,rs.getDouble("reviewavg")));
+				
+				list.add(dto);
+			}
+			
+			return list;
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.searchByCategory");
+			e.printStackTrace();
+
+		}
+		
+		return null;
+	}
+
+	public int getSearchByNameCount(String cseq, String keyword) {
+		
+		try {
+			String sql = String.format("select count(*) as cnt from tblLodging where name like '%%s%' and cseq = ?", keyword);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery();
+			
+			if (rs.next()) {
+				return Integer.parseInt(rs.getString("cnt"));	
+			}
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.getSearchByNameCount");
+			e.printStackTrace();
+
+		} 
+		
+		return 0;
+		
+	}
+	
+	/**
+	 * 카테고리로 검색한 결과의 개수를 반환하는 메서드
+	 * 
+	 * @author 안수아
+	 * @param cseq
+	 * @param keyword
+	 * @return int
+	 */
+	public int getSearchByCategoryCount(String cseq, String keyword) {
+		
+		try {
+			String sql = String.format("select count(*) as cnt from tblLodging l inner join tblLodgingCategory lc on l.lcseq = lc.seq where category like '%%s%' and l.cseq = ?", keyword);
+			pstat = conn.prepareStatement(sql);
+			pstat.setString(1, cseq);
+			rs = pstat.executeQuery();
+			
+			if (rs.next()) {
+				return Integer.parseInt(rs.getString("cnt"));	
+			}
+			
+		} catch (Exception e) {
+			System.out.println("FoodDAO.getSearchByNameCount");
+			e.printStackTrace();
+
+		} 
+		
+		return 0;
+		
+	}
+
 
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~서영 DAO 끝~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

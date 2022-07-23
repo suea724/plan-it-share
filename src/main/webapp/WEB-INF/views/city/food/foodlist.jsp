@@ -119,10 +119,6 @@
 				<button type="button" class="btn btn-secondary" id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
 			
-			<c:if test="${empty keyword}">
-			<h1>인기 음식점</h1>
-			</c:if>
-			
 			<!-- 리스트 출력 -->
 			<c:forEach var="dto" items="${list}">
 			<div class="card" onclick="location.href='/planitshare/city/food/view.do?cseq=${dto.cseq}&seq=${dto.seq}'">

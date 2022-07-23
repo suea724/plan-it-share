@@ -124,6 +124,19 @@
 	#header-menu li:nth-child(2) a {
 		color: #6DA2DF
 	}
+	
+	.card-text span {
+		margin-right: 10px;
+	}
+	
+	.card-text i {
+		margin-right: 5px;
+	}
+	
+	#info-box {
+		font-wegiht: bold;
+	}
+	
 </style>
 <script src="/planitshare/asset/js/jquery.rateit.js"></script>
 <link rel="stylesheet" href="/planitshare/asset/css/rateit.css"/>
@@ -134,18 +147,28 @@
 	<main>
 		<section>
 			<div id="info-box">
-				<img src="/planitshare/asset/image/${dto.image}">
-				<h5>${dto.name}</h5>
-				<p>${dto.category}</p>
-				<p>${dto.address}</p>
-				<p><span>영업시작시간: ${dto.open}</span> <span>영업종료시간: ${dto.close}</span></p>
-				<p>
-			    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likeCnt}</span>
-			    	<i class="fa-solid fa-star reviewCnt"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
-		    	</p>
-				<c:if test="${auth.loginmode == 'user'}">
-				<p><button id="like"><i class="fa-solid fa-heart"></i></button></p>
-				</c:if>
+				<table>
+					<tr>
+						<td><img src="/planitshare/asset/image/${dto.image}"></td>
+						<td>
+							<h5>${dto.name}</h5>
+							<p>${dto.category}</p>
+							<p>${dto.address}</p>
+							<p><span>영업시작시간: ${dto.open}</span> <span>영업종료시간: ${dto.close}</span></p>
+							<p>
+						    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likeCnt}</span>
+						    	<i class="fa-solid fa-star reviewCnt"></i><span>${dto.reviewAvg eq null ? 0.0 : dto.reviewAvg} (${dto.reviewCnt})</span>
+					    	</p>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<c:if test="${auth.loginmode == 'user'}">
+							<p><button id="like"><i class="fa-solid fa-heart"></i></button></p>
+							</c:if>							
+						</td>
+					</tr>
+				</table>
 			</div>
 			
 			<div id="write-review">

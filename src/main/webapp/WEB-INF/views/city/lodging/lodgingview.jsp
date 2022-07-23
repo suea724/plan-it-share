@@ -19,8 +19,8 @@
    	}
    	
    	.container img {  
-   		width: 500px;
-   		heigth: 500px;
+   		width: 400px;
+		height: 250px;
    		background-size: contain;	
    		float: left;
    		margin-right: 20px;
@@ -113,8 +113,47 @@
       font-size: 2rem;
     }
     
-    
+    #info-box {
+		width: 800px;
+		height: 200px;
+		margin: 0 auto 100px auto;
+	}
 
+	#info-box img {
+		width: 400px;
+		height: 250px;
+		float: left;
+		margin-right: 20px;
+	}
+	
+	#info-box i {
+		margin-right: 5px;
+	}
+	
+	#write-review table {
+		width: 800px;
+	}
+	
+	#write-review table td:first-child {
+		width: 700px;
+	}
+	
+	#write-review {
+		margin-bottom: 60px;
+	}
+	
+	input.form-control-file {
+		width: 650px;
+		float: right;
+	}
+	
+	textarea {
+		resize: none;
+	}
+    
+    #write-review td {
+    	padding: 10px;
+    }
 </style>
 </head>
 <body>
@@ -122,51 +161,71 @@
 	
 	<main>
 		<section>
-			<div class="container">
-	         <img src="/planitshare/asset/image/${dto.image}">
-		         <ul>
-		         	<li>${dto.name}</li>
-					<li>${dto.address}</li>
-		         	<li>체크인시간: ${dto.checkin} 체크아웃시간: ${dto.checkout}
-		         	<li>${dto.category}</li>
-		         	<li>
-			         	<i class="fa-solid fa-heart"></i>
-			         	<span id="likeCnt">${dto.likecnt}</span>
-			         	<i class="fa-solid fa-star"></i>${dto.reviewavg}
-		         	</li>
-		         	
-		         </ul>
-
-		         <button id="like"><i class="fa-solid fa-heart"></i></button>
-
-         	</div>
-         	
+		
+		<div id="info-box">
+			<table>
+				<tr>
+					<td><img src="/planitshare/asset/image/${dto.image}"></td>
+					<td>
+						<h5>${dto.name}</h5>
+						<p>${dto.category}</p>
+						<p>${dto.address}</p>
+						<p><span>체크인시간: ${dto.checkin}</span> <span>체크아웃시간: ${dto.checkout}</span></p>
+						<p>
+					    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likecnt}</span>
+					    	<i class="fa-solid fa-star reviewCnt"></i><span>${dto.reviewavg eq null ? 0.0 : dto.reviewavg} (${dto.reviewcnt})</span>
+				    	</p>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2">
+						<c:if test="${auth.loginmode == 'user'}">
+						<p><button id="like"><i class="fa-solid fa-heart"></i></button></p>
+						</c:if>							
+					</td>
+				</tr>
+			</table>
+		</div>
+			
          	<!-- 댓글쓰기 -->
+         	
          	<form action="/planitshare/city/lodgingreview.do" method="post" enctype="multipart/form-data">
+         	<div id="write-review">
+				
+				<span class="rateit" data-rateit-mode="font" data-rateit-resetable="false"></span>
+				<input type="file" class="form-control-file" name="image">
+	         	<input type="hidden" name="lseq" value="${dto.seq}">
+				<input type="hidden" name="star">
+				<table>
+					<tr>
+						<td><textarea class="form-control" name="content" rows="5" placeholder="리뷰를 작성해주세요."></textarea></td>
+						<td><input type="submit" value="리뷰 등록" class="btn btn-secondary" id="add-review"/></td>
+					</tr>
+				</table>
+			</div>
+			</form>
+			
+         	<!-- <form action="/planitshare/city/lodgingreview.do" method="post" enctype="multipart/form-data">
 			<table class="tblAddComment">
 				<tr>
 					<td>
 						<div class="rateit" data-rateit-resetable="false" data-rateit-mode="font" style="font-size:35px"></div>
-						<input type="file" name="image"> 
+						<input type="file" class="form-control-file" name="image"> 
 					</td>
 				</tr>
 				<tr>
 					<td>
-						<textarea class="form-control" name="content" required></textarea>
+						<textarea class="form-control" rows="5" name="content" required></textarea>
 					</td>
-					<td>
+					<td style="vertical-align: middle;">
 						<button class="btn btn-secondary" type="submit" >
-							리뷰등록하기
+							리뷰 등록
 						</button>
 					</td>
 				</tr>
 				
-			</table>
+			</table> -->
          	
-         	<input type="hidden" name="lseq" value="${dto.seq}">
-			<input type="hidden" name="star">
-         	
-			</form>
 			
 			<!-- 댓글 목록  -->
 			<table class="table table-bordered comment">
@@ -199,8 +258,6 @@
 				<a href="javascript:;" id="review-more" onclick="reviewMore(${dto.seq})"><i class="fa-solid fa-plus"></i> 댓글 10개씩 더보기</a>
 			</div>
 			</c:if>
-			
-			
 			 
 		</section>
 	</main>
@@ -213,8 +270,6 @@
 		});
 	  
 	     //댓글 삭제 
-	     
-	     
 	     function delComment(seq) {
 			
 	    	 let tr = $(event.target).parents('tr');
@@ -240,14 +295,10 @@
 	                  console.log(a,b,c);
 	               }
 	               
-	                   
 	            });
 	            
 	      }
 	         
- 		
-	     
-	     
 	     //찜하기(좋아요)
 	 	 $(document).on("click", '#like', function() {
 	 		 

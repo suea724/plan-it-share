@@ -29,12 +29,16 @@ public class Main extends HttpServlet {
 		ArrayList<PlanDTO> plist = dao.getPlanList();
 
 		
+		for (PlanDTO dto : plist) {
+			if (dto.getTitle().length() >= 20) {
+				dto.setTitle(dto.getTitle().substring(0, 20) + "...");
+			}
+		}
+		
 		req.setAttribute("rlist", rlist);
-
 		req.setAttribute("plist", plist);
-
+		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/main.jsp");
-
 		dispatcher.forward(req, resp);
 
 	}
@@ -99,16 +103,6 @@ public class Main extends HttpServlet {
 			}
 		}
 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 		
 	}
 

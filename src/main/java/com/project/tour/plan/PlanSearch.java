@@ -100,7 +100,7 @@ public class PlanSearch extends HttpServlet {
 			
 			}
 		
-while (!(loop > blockSize || n > totalPage )) {
+		while (!(loop > blockSize || n > totalPage )) {
 			
 			if (n == nowPage) {
 				pagebar += String.format("<li class=\"page-item active\"><a class=\"page-link\" href=\"#!\">%d</a></li> ", n);
