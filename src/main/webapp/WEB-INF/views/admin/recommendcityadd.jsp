@@ -24,7 +24,7 @@
 
 	<script>
 		<c:if test="${res == 1}">
-		location.href = '/planitshare/recommendcitylist.do';
+		location.href = '/planitshare/recommendcity.do';
 		</c:if>
 		
 		<c:if test="${res == 0}">

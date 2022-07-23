@@ -311,15 +311,12 @@ public class UserDAO {
 	  			
 	  			
 	  			try {
-	  				
 
 	  	            String sql = "update tblUser set name = 'not used', pw = 'not used', tel = 'not used', profile = 'not used', regdate = sysdate, gender = 'not used', active='n' where id = ?";
 	  	            pstat = conn.prepareStatement(sql);
 	  	            pstat.setString(1, id);
 
 	  	            return pstat.executeUpdate();
-	  				
-	  				
 	  				
 	  			} catch (Exception e) {
 	  				System.out.println("UserDAO.unregister");

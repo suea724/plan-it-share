@@ -114,6 +114,7 @@ public class UserList extends HttpServlet {
 		
 		pagebar += "</ul>";
 		
+		setList(list);
 		
 		req.setAttribute("list", list);
 		req.setAttribute("pagebar", pagebar);
@@ -124,10 +125,24 @@ public class UserList extends HttpServlet {
 
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+	private void setList(ArrayList<UserDTO> list) {
+		
+		for (UserDTO dto : list) {
+			
+			if (dto.getActive().equals("y")) {
+				String tel = dto.getTel(); 
+				dto.setTel(tel.substring(0, 3) + '-' + tel.substring(3, 7) + '-' + tel.substring(7));
+				dto.setGender(dto.getGender().equals("m") ? "남자" : "여자");
+			} else {
+				dto.setName("-");
+				dto.setGender("-");
+				dto.setTel("-");
+			}
+			
+			dto.setRegdate(dto.getRegdate().substring(0, 10));
+		}
 	}
+
 
 }
 

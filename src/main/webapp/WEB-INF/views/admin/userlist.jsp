@@ -45,11 +45,10 @@
    	  text-align: center;
    }
    
-   .table td:nth-child(2) {text-align: center;}
-   .table td:nth-child(3) {text-align: center;}
-   .table td:nth-child(5) {text-align: center;}
-   .table td:nth-child(6) {text-align: center;}
-   .table td:nth-child(7) {text-align: center;}
+   .table td {
+   		text-align: center;
+   		vertical-align: middle;
+   }
 	
 </style>
 </head>
@@ -68,7 +67,7 @@
 				<th>성별</th>
 				<th>전화번호</th>
 				<th>상태</th>
-				<th>가입일</th>
+				<th>가입 또는 탈퇴일</th>
 				<th></th>
 			</tr>
 			<c:forEach items="${list}" var="dto">

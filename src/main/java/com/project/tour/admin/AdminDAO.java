@@ -48,7 +48,7 @@ public class AdminDAO {
 
 		try {
 			
-			String sql = "select * from (select id, name, gender, tel, active, to_char(regdate, 'yyyy.mm.dd') as regdate, rownum as rnum from tblUser u) where rnum between ? and ?";
+			String sql = "select * from (select rownum as rnum,a.* from (select * from tblUser u order by regdate desc) a) where rnum between ? and ?";
 			
 			pstat = conn.prepareStatement(sql);
 			
@@ -1259,9 +1259,6 @@ public class AdminDAO {
 					
 					blist.add(rs.getString("word"));
 				}
-				
-				
-				System.out.println(blist);
 				
 				return blist;
 				

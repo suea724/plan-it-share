@@ -9,9 +9,22 @@
 <%@ include file="/WEB-INF/views/inc/asset.jsp" %>
 <style>
 	
-	section {
-      display: inline-block;
-      width: 2500px;
+   section {
+      display: flex;
+   }
+
+   #admin-submenu {
+      width: 200px;
+      height: 300px;
+      margin-right: 50px;
+      margin-top: 100px;
+   }
+   
+   #admin-submenu li {
+      list-style: none;
+      margin-bottom: 15px;
+      font-size: 23px;
+      font-weight: bold;
    }
 	
 	
@@ -21,10 +34,11 @@
 		margin-top: 30px;
 	}
 			
-	#img1 {
+	.img {
+		position: relative;
 		margin:0;
-		width: 350px;
-		height: 200px;
+		width: 200px;
+		height: 150px;
 	}
 	
 	.imgtd {
@@ -60,7 +74,7 @@
     .table {
     	float:left;
     	text-align: center;
-    	width: 1190px;
+    	width: 1000px;
     	margin-top: 50px;
     	margin-right: 150px;
     	border-collapse: collapse;
@@ -94,11 +108,6 @@
     	margin-left: 100px;
     }
     
-    #sub{
-    	float:left;
-    
-    }
-    
     .table td {
     	border: none;
     
@@ -107,6 +116,7 @@
     .sub {
     	margin-left: 150px;
     }
+    
     #admin-submenu {
       display:inline-block;
       width: 200px;
@@ -148,24 +158,28 @@
    	  width: 1900px;
    }
    
-   #delbtn {
+   button.delbtn {
    	  position: absolute;
    	  top: 20px;
-   	  right: 15px;
+   	  right: 20px;
+   	  width: 30px;
+   	  height: 30px;
+   	  padding: 5px;
+   }
    
+   button.delbtn i {
+   		text-align:center;
    }
    
    #search-box {
 		hint
 		margin-top: 50px;
 		text-align: right;
-		padding-right: 270px;
-		
+		margin-right: 50px;
 	}
 	
-	#search-box > * {
+	#search-form > * {
 		display: inline-block;
-		margin-right: 10px;
 	}
 	
 	#search-box select {
@@ -184,7 +198,7 @@
     	margin-top: 10px;
     	text-align: center;
     }
-   
+    
 </style>
 </head>
 <body>
@@ -194,53 +208,38 @@
 		<%@ include file="/WEB-INF/views/inc/header.jsp" %>
 		<section>
 		
+		<%@ include file="/WEB-INF/views/inc/adminsubmenu.jsp" %>
 		
-		<div id="head"><h2>추천 여행지 관리</h2></div>
-		
-		
-		<div id="sub">
-			<%@ include file="/WEB-INF/views/inc/adminsubmenu.jsp" %>
-         	</div>
-		
-		
-			<div>
-				<div>
-				<form method= "GET" action="/planitshare/recommendcityadd.do">
-				<div id="search-box">
-				
-				<input type="text" name="city" id="" class="form-control" placeholder="등록할 추천도시명을 입력해주세요."/>
-				<button class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
-            
-				
-				
-				</div>
-				</form>
-				</div>
-				<table class="table">
-						<c:forEach items="${rlist}" var="rdto">
-							<tr class="list">
-								<td class="imgtd">
-									<form method = "GET" action="/planitshare/recommendcitylist.do">
-									<img src="/planitshare/asset/image/${rdto.image}" id="img1">
-									<button class="btn btn-secondary" id="delbtn">X</button>
-									<span>${rdto.name}</span>
-									<input type="hidden" name="cityseq" value="${rdto.cseq}"/>
-									</form>
-								</td>
-							</tr>
-						</c:forEach>
-				</table>
-				</div>
-			
-
-			
+		<table class="table">
+			<tr>
+				<td>
+					<div id="search-box">
+						<form method= "GET" action="/planitshare/recommendcityadd.do" id="search-form">
+							<input type="text" name="city" id="" class="form-control" placeholder="등록할 추천도시명을 입력해주세요."/>
+							<button class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
+						</form>
+					</div>				
+				</td>
+			</tr>
+			<c:forEach items="${rlist}" var="rdto">
+				<tr class="list">
+					<td class="imgtd">
+						<img src="/planitshare/asset/image/${rdto.image}" class="img">
+						<button class="btn btn-secondary delbtn" type="button" onclick="location.href='/planitshare/adminpage/recommendcity.do?cseq=${rdto.seq}'"><i class="fa-solid fa-x"></i></button>
+						<span>${rdto.name}</span>
+						<input type="hidden" name="cityseq" value="${rdto.cseq}"/>
+					</td>
+				</tr>
+			</c:forEach>
+		</table>
 			
 		</section>
 	</main>
 
 
 	<script>
-	
+		// 서브 메뉴 현재 위치 색상 표시
+		$('#admin-submenu li:nth-child(1) a').css('color', '#6DA2DF');
 	</script>
 
 

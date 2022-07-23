@@ -27,10 +27,9 @@
       font-weight: bold;
    }
    
-   h1{
-   		display: inline;
-   		width: 1000px;
-   		float:left;
+   h3 {
+   		text-align: center;
+   		margin-bottom: 10px;
    }
    
    #each {
@@ -45,17 +44,8 @@
    .board{
 
    	  margin-top: 100px;
-   	  margin-bottom: 100px;
+   	  margin-bottom: 50px;
    	  width: 1000px;
-   }
-   
-   #cbox {
-   	  width: 200px;
-   }
-   
-   .ins {
-   	  display: inline-block;
-   	  float: right;
    }
    
    #page {
@@ -66,13 +56,26 @@
    	  
    }
    
+   #banadd {
+   		width: 300px;
+   		display: inline-block;
+   		margin-bottom: 10px;
+   }
    
-
+   #addbox {
+   		float: right;
+   }
    
+   #admin-submenu li:nth-child(5) a { color : #6DA2DF; }
    
+   .table th {
+   		text-align: center;
+   }
    
+   .table th:first-child {
+   		width: 80px;
+   }
    
-	
 </style>
 </head>
 <body>
@@ -90,9 +93,9 @@
          		<div class="board">
 	         		<div>
 	         		<form method="GET" action="/planitshare/admin/bannedwordadd.do">
-					<h1 class="ins">금칙어 등록</h1>
-					<span  class="ins">
-					<input type="text" name="word" id="banadd"/>
+					<h3 class="ins">금칙어 등록</h3>
+					<span id="addbox">
+					<input type="text" name="word" id="banadd" class="form-control"/>
 					<button class="btn btn-secondary">등록</button>
 					</span>
 					
@@ -100,9 +103,9 @@
 					</div>
 					
 				<form method="GET" action="/planitshare/admin/bannedwordlist.do" id="multidelete">
-				<table class="table table-bordered">
+				<table class="table table-bordered" id="add-word">
 				<tr>
-					<th><input type="checkbox" name="all" id="cbox" width="200px"/></th>
+					<th><input type="checkbox" name="all" id="cbox"/></th>
 					<th style="text-align: center;">금지어명</th>
 				</tr>
 				<c:forEach items="${list}" var="dto" varStatus="status">
@@ -116,28 +119,25 @@
 					<td colspan="2" style="text-align: center;">등록된 금지어가 없습니다.</td>
 				</tr>
 				</c:if>
-
 				</table>
+				<button class="btn btn-danger" style="float:right;">삭제</button>
+				</form>
+				</div>
 				
-			
 				<div id="page">
 					${pagebar}
-					<button class="btn btn-secondary" style="float:right;">삭제</button>
-				</div>
-				</form>
-				
 				</div>
 			
 				<div class="board">
 				<div id="title">
-					<h1 class="ins">금칙어 게시글</h1>
+					<h3 class="ins">금칙어 게시글</h3>
 				</div>
 				
 				<form method="GET" action="/planitshare/admin/bannedwordlist.do" id="multideleteplan">
 				<table class="table table-bordered">
 					<tr>
 						<th><input type="checkbox" name="all" id="cbox1"/></th>
-						<th>작성글제목</th>
+						<th>작성글 제목</th>
 						<th>금칙어</th>
 						<th>작성자</th>
 						<th>등록일</th>
@@ -156,15 +156,10 @@
 						<td colspan="5" style="text-align: center;">금지어로 등록된 게시글이 없습니다.</td>
 					</tr>
 					</c:if>
-					<div>
-					</div>
-					
-	
 				</table>
 				
-					<button class="btn btn-secondary" style="float:right;">삭제</button>
+					<button class="btn btn-danger" style="float:right;">삭제</button>
 				</form>
-				</div>
 				</div>
 				</div>
 		
