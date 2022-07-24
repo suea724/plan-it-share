@@ -268,6 +268,7 @@ public class PlanDAO {
 					dto.setLat(rs.getString("lat"));
 					dto.setLng(rs.getString("lng"));
 					dto.setCategory(rs.getString("category"));
+					dto.setDistinct("food");
 					
 					list.add(dto);
 				}
@@ -301,6 +302,7 @@ public class PlanDAO {
 					dto.setLat(rs.getString("lat"));
 					dto.setLng(rs.getString("lng"));
 					dto.setCategory(rs.getString("category"));
+					dto.setDistinct("tour");
 					
 					list.add(dto);
 				}
@@ -334,6 +336,7 @@ public class PlanDAO {
 					dto.setLat(rs.getString("lat"));
 					dto.setLng(rs.getString("lng"));
 					dto.setCategory(rs.getString("category"));
+					dto.setDistinct("lodging");
 					
 					list.add(dto);
 				}

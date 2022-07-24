@@ -79,12 +79,10 @@ public class PlanView extends HttpServlet {
 		// 해당 일정의 편집 권한이 있는 사람 목록 가져오기
 		ArrayList<PlanUserDTO> puList = dao.getPlanUser(seq);
 		
-		// date 파싱
-		pdto.setRegdate(pdto.getRegdate().substring(0, 10));
-		pdto.setStartdate(pdto.getStartdate().substring(0, 10));
-		pdto.setEnddate(pdto.getEnddate().substring(0, 10));
+		setPlanDTO(pdto);
 		
 		req.setAttribute("days", days);
+		req.setAttribute("dayCnt", days.size());
 		req.setAttribute("clist", clist);
 		req.setAttribute("pdto", pdto);
 		req.setAttribute("planList", planList);
@@ -93,6 +91,17 @@ public class PlanView extends HttpServlet {
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/plan/planview.jsp");
 		dispatcher.forward(req, resp);
 
+	}
+
+	private void setPlanDTO(PlanDTO pdto) {
+		
+		// date 파싱
+		pdto.setRegdate(pdto.getRegdate().substring(0, 10));
+		pdto.setStartdate(pdto.getStartdate().substring(0, 10));
+		pdto.setEnddate(pdto.getEnddate().substring(0, 10));
+		
+		// 줄바꿈
+		pdto.setContent(pdto.getContent().replace("\r\n", "<br>"));
 	}
 
 	private ArrayList<DayDTO> getDays(PlanDTO pdto) {
