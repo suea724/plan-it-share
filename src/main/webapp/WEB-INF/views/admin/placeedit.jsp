@@ -151,7 +151,7 @@
 	
 	</main>
 
-
+	<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script>
 		// 서브 메뉴 현재 위치 색상 표시
 		$('#admin-submenu li:nth-child(4) a').css('color', '#6DA2DF');
@@ -210,6 +210,28 @@
 		
 		// 주소 입력
 		$('#address').val(address);
+		
+		window.onload = function() {
+			
+			document.getElementById("address").addEventListener("click", function() {
+				
+				var width = 500; //팝업의 너비
+				var height = 600; //팝업의 높이
+				
+				new daum.Postcode({
+					width: width,
+			        height: height,
+			        oncomplete: function(data) {
+			        	document.getElementById('address').value = data.address;
+			        }
+			    }).open({
+			        left: (window.screen.width / 2) - (width / 2),
+			        top: (window.screen.height / 2) - (height / 2)
+			    });
+				
+			});
+			
+		}
 		
 		function selectDistrinct(distrinct) {
 			

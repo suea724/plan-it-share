@@ -125,6 +125,28 @@
 		// 서브 메뉴 현재 위치 색상 표시
 		$('#admin-submenu li:nth-child(4) a').css('color', '#6DA2DF');
 		
+		window.onload = function() {
+			
+			document.getElementById("address").addEventListener("click", function() {
+				
+				var width = 500; //팝업의 너비
+				var height = 600; //팝업의 높이
+				
+				new daum.Postcode({
+					width: width,
+			        height: height,
+			        oncomplete: function(data) {
+			        	document.getElementById('address').value = data.address;
+			        }
+			    }).open({
+			        left: (window.screen.width / 2) - (width / 2),
+			        top: (window.screen.height / 2) - (height / 2)
+			    });
+				
+			});
+			
+		}
+		
 		$('#distinct').change(function() {
 			
 			$.ajax({
@@ -204,15 +226,6 @@
 			});
 		});
 		
-		$('#address').click(function() {
-			new daum.Postcode({
-		        oncomplete: function(data) {
-		            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-		            // 예제를 참고하여 다양한 활용법을 확인해 보세요.
-		        }
-		    }).open();
-			
-		})
 	</script>
 
 
