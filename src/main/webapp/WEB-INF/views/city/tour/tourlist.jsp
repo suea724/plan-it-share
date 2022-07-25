@@ -118,7 +118,7 @@
 					<option value="placename">관광명소명</option>
 					<option value="category">카테고리</option>
 				</select>
-				<input type="text" name="keyword" class="form-control" />
+				<input type="text" name="keyword" class="form-control" placeholder="검색어를 입력해주세요."/>
 				<button type="button" name="btn-search" class="btn btn-secondary" onclick="search();"><i class="fa-solid fa-magnifying-glass"></i></button>
 			</div>
 			<input type="hidden" name="cseq" value="${cseq}">

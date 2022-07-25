@@ -40,7 +40,7 @@
    }
    
    #search-box select {
-      width: 100px;
+      width: 120px;
    }
    
    #search-box input[type=text] {
@@ -187,7 +187,7 @@
                <option>관광명소</option>
                <option>숙소</option>
             </select>
-            <input type="text" name="keyword" id="" class="form-control" />
+            <input type="text" name="keyword" id="" class="form-control" placeholder="검색어를 입력해주세요."/>
             <button class="btn btn-secondary"><i class="fa-solid fa-magnifying-glass"></i></button>
          </div>
          </form>

@@ -137,6 +137,11 @@
 		font-wegiht: bold;
 	}
 	
+	#map-btn {
+		cursor: pointer;
+		color: dimgray;
+	}
+	
 </style>
 <script src="/planitshare/asset/js/jquery.rateit.js"></script>
 <link rel="stylesheet" href="/planitshare/asset/css/rateit.css"/>
@@ -153,7 +158,7 @@
 						<td>
 							<h5>${dto.name}</h5>
 							<p>${dto.category}</p>
-							<p>${dto.address}</p>
+							<p>${dto.address} &nbsp;&nbsp;<span id="map-btn" onclick="openChild()"><i class="fa-solid fa-map-location-dot"></i></span></p>
 							<p><span>영업시작시간: ${dto.open}</span> <span>영업종료시간: ${dto.close}</span></p>
 							<p>
 						    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likeCnt}</span>
@@ -212,6 +217,24 @@
 	</main>
 
 <script>
+
+	var openWin;
+	
+	function openChild()
+	{
+		
+		var _width = '500';
+		var _height = '350';
+		
+		var left = Math.ceil(( window.screen.width - _width )/2);
+	    var top = Math.ceil(( window.screen.height - _height )/2);
+	
+	    // window.name = "부모창 이름"; 
+	    window.name = "parentForm";
+	    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+	    openWin = window.open("/planitshare/city/food/view/map.do?seq=" + ${dto.seq},
+	            "childForm", "width=500, height=350, resizable = no, scrollbars = no, left=" + left + ", top=" + top );    
+	}
 
 	// 관심등록한 음식점일 경우
 	<c:if test="${like == 'y'}">

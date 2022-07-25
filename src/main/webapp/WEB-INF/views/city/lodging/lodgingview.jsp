@@ -154,6 +154,12 @@
     #write-review td {
     	padding: 10px;
     }
+    
+   	#map-btn {
+		cursor: pointer;
+		color: dimgray;
+	}
+	
 </style>
 </head>
 <body>
@@ -169,7 +175,7 @@
 					<td>
 						<h5>${dto.name}</h5>
 						<p>${dto.category}</p>
-						<p>${dto.address}</p>
+						<p>${dto.address} &nbsp;&nbsp;<span id="map-btn" onclick="openChild()"><i class="fa-solid fa-map-location-dot"></i></span></p>
 						<p><span>체크인시간: ${dto.checkin}</span> <span>체크아웃시간: ${dto.checkout}</span></p>
 						<p>
 					    	<i class="fa-solid fa-heart likeCnt"></i><span id="likeCnt">${dto.likecnt}</span>
@@ -263,6 +269,23 @@
 	</main>
 <script src="/planitshare/asset/js/jquery.rateit.js"></script>	
 <script>
+
+		var openWin;
+		
+		function openChild()
+		{
+			var _width = '500';
+			var _height = '350';
+			
+			var left = Math.ceil(( window.screen.width - _width )/2);
+		    var top = Math.ceil(( window.screen.height - _height )/2);
+		
+		    // window.name = "부모창 이름"; 
+		    window.name = "parentForm";
+		    // window.open("open할 window", "자식창 이름", "팝업창 옵션");
+		    openWin = window.open("/planitshare/city/lodging/view/map.do?seq=" + ${dto.seq},
+		            "childForm", "width=500, height=350, resizable = no, scrollbars = no, left=" + left + ", top=" + top );    
+		}
 
 	 	$('.rateit').bind('rated', function (event, value) {
 		  	$('input[name=star]').val(value);

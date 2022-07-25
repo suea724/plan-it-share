@@ -160,6 +160,60 @@ public class TourDAO {
 		
 		return null;
 	}
+	
+	public TourDTO findTour(String seq) {
+		
+		try {
+			
+			String sql = "select\r\n"
+					+ "       t.seq, \r\n"
+					+ "       t.placename, \r\n"
+					+ "       t.address, \r\n"
+					+ "       t.open, \r\n"
+					+ "       t.close, \r\n"
+					+ "       t.image, \r\n"
+					+ "       t.cseq, \r\n"
+					+ "       tc.category, \r\n"
+					+ "       (select count(*) from tblLikeTour lt where lt.tseq = t.seq) as likeCnt, \r\n"
+					+ "       (select count(*) from tblTourReview tr where tr.tseq = t.seq) as reviewCnt, \r\n"
+					+ "       (select round(avg(tr.star), 2) from tblTourReview tr where tr.tseq = t.seq) as reviewAvg\r\n"
+					+ "  from tblTour t \r\n"
+					+ " inner join tblCity c on t.cseq = c.seq\r\n"
+					+ " inner join tblTourCategory tc on t.tcseq = tc.seq \r\n"
+					+ " where t.seq = ? order by likeCnt desc";
+			
+			pstat = conn.prepareStatement(sql);
+			
+			pstat.setString(1, seq);
+			
+			rs = pstat.executeQuery();
+			
+			TourDTO dto = new TourDTO();
+			
+			if(rs.next()) {
+				
+				dto.setSeq(rs.getString("seq"));
+				dto.setPlaceName(rs.getString("placename"));
+				dto.setAddress(rs.getString("address"));
+				dto.setOpen(rs.getString("open"));
+				dto.setClose(rs.getString("close"));
+				dto.setImage(rs.getString("image"));
+				dto.setCategory(rs.getString("category"));
+				dto.setLikeCnt(rs.getString("likeCnt"));
+				dto.setReviewCnt(rs.getString("reviewCnt"));
+				dto.setReviewAvg(rs.getString("reviewAvg"));
+				dto.setPlaceName(rs.getString("placename"));
+			}
+			
+			return dto;
+			
+		} catch (Exception e) {
+			System.out.println("TourDAO.getTourOne");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
 
 
 	/**
